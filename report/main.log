@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2020.2.17)  17 FEB 2020 17:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2020.2.17)  17 FEB 2020 17:48
 entering extended mode
 **c:/Users/Christoffer/Documents/DAT500/dat500-project/report/main.tex
 (c:/Users/Christoffer/Documents/DAT500/dat500-project/report/main.tex
@@ -1168,10 +1168,10 @@ LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
 (Font)              scaled to size 9.0pt on input line 40.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/sc' will be
 (Font)              scaled to size 9.0pt on input line 40.
-) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/background.tex) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/relatedwork.tex) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/hadoop.tex) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/method.tex [1.1{C:/Users/Christoffer/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
+) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/background.tex) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/relatedwork.tex) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/hadoop.tex) [1.1{C:/Users/Christoffer/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
 
-]) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/evaluation.tex
-Underfull \vbox (badness 1728) has occurred while \output is active []
+] (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/method.tex) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/evaluation.tex
+Underfull \vbox (badness 2126) has occurred while \output is active []
 
 LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 8.
  ("C:\Program Files\MiKTeX 2.9\tex/latex/inconsolata\t1zi4.fd"
@@ -1187,13 +1187,13 @@ PGFPlots: reading {data/data-unoptimized.csv}
 PGFPlots: reading {data/data-optimized.csv}
 ) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/conclusion.tex) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/citations.tex
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
-(Font)              scaled to size 9.0pt on input line 9.
+(Font)              scaled to size 9.0pt on input line 6.
  [2.2]) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/latex.tex
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
 (Font)              scaled to size 7.3pt on input line 1.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
 (Font)              scaled to size 5.5pt on input line 4.
-<fig/RegisterOperations.jpg, id=138, 1597.97pt x 1258.7025pt>
+<fig/RegisterOperations.jpg, id=137, 1597.97pt x 1258.7025pt>
 File: fig/RegisterOperations.jpg Graphic file (type jpg)
 <use fig/RegisterOperations.jpg>
 Package pdftex.def Info: fig/RegisterOperations.jpg  used on input line 25.
@@ -1203,7 +1203,7 @@ Overfull \hbox (2.89413pt too wide) in paragraph at lines 30--32
 []\T1/LinuxLibertineT-TLF/m/n/9 (-20) You can cre-ate graphs from your experiment-data us-ing \T1/zi4/m/n/9 pgfplots\T1/LinuxLibertineT-TLF/m/n/9 (-20) .
  []
 
-[3.3 <c:/Users/Christoffer/Documents/DAT500/dat500-project/report/fig/RegisterOperations.jpg>]) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/further.tex
+) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/further.tex [3.3]
 Overfull \hbox (11.8236pt too wide) in paragraph at lines 3--4
 \T1/LinuxLibertineT-TLF/m/n/9 (-20) legacy / publications / library / proceedings / dsl97 / good _ paper . html$[] 
  []
@@ -1257,9 +1257,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 190--199
 []$\T1/LinuxLibertineT-TLF/m/n/7 (+18) https : / / www . inf . ethz . ch / personal / markusp / teaching / 263-[]2300-[]ETH-[]spring11 /
  []
 
-) [4.4
-
-]
+) [4.4 <c:/Users/Christoffer/Documents/DAT500/dat500-project/report/fig/RegisterOperations.jpg>]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 91.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 91.
  (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\main.aux)
@@ -1277,7 +1275,7 @@ Here is how much of TeX's memory you used:
  1302 hyphenation exceptions out of 8191
  81i,20n,138p,855b,2332s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/inconsolata/i4-t1-4.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_oexx6f.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_ncsllp.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_7grukw.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_25tcsq.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/newtx/LibertineMathMI.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/libertine/LinBiolinumT.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/libertine/LinBiolinumTB.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/libertine/LinLibertineT.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/libertine/LinLibertineTB.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/libertine/LinLibertineTI.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/newtx/txsys.pfb>
-Output written on c:/Users\Christoffer\Documents\DAT500\dat500-project\report\main.pdf (4 pages, 565404 bytes).
+Output written on c:/Users\Christoffer\Documents\DAT500\dat500-project\report\main.pdf (4 pages, 565340 bytes).
 PDF statistics:
  241 PDF objects out of 1000 (max. 8388607)
  46 named destinations out of 1000 (max. 500000)
