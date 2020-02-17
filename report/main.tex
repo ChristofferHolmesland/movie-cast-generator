@@ -1,0 +1,83 @@
+%%%% 
+% This is a template for project reports in the subject DAT620 at the
+% Department of Electrical Engineering and Computer Science,
+% University of Stavanger.
+% 
+% The template is based on the ACM conference template 
+% it was edited by Leander Jehl and Hein Meling
+\documentclass[sigconf]{acmart}
+
+\input{dat620-setup}
+
+%In the preamble file you can include packages and define macros.
+\input{preamble}
+
+\begin{document}
+%TODO: Replace the title with your project title.
+\title{My DAT500 Project Report}
+%you may use a subtitle
+\subtitle{My project subtitle}
+
+%TODO replace author names with your name and email below:
+\author{Christoffer Holmesland}
+\affiliation{University of Stavanger, Norway}
+\email{cr.holmesland@stud.uis.no}
+
+\author{Student Name 2}
+\affiliation{University of Stavanger, Norway}
+\email{myEmail2@stud.uis.no}
+
+%TODO: add the name of one or more supervisors
+\supervisors{Leander Jehl and Hein Meling}
+
+
+
+\begin{abstract}
+%The abstract lies in a different file: 
+\input{tex/abstract}
+\end{abstract}
+
+%TODO: Replace with some keywords, relevant for your project
+\keywords{Report writing, Latex tips}
+
+\maketitle
+
+%Each section can be placed in a separate file and included by the input command.
+
+\section{Introduction}
+\label{sec:introduction}
+\input{tex/introduction}
+
+\section{Background}
+\label{sec:background}
+\input{tex/background}
+
+\section{Your Method}
+\label{sec:method}
+\input{tex/method}
+
+\section{Experimental Evaluation}
+\label{sec:evaluation}
+\input{tex/evaluation}
+
+\section{Conclusion}
+\label {sec:conclusion}
+\input{tex/conclusion.tex}
+
+\section{Citation}
+\label{sec:citation}
+\input{tex/citations}
+
+
+\section{Latex}
+\label{sec:latex} 
+\input{tex/latex}
+
+\section{Further Reading}
+\label{sec:further}
+\input{tex/further}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-bibliography}
+
+\end{document}
