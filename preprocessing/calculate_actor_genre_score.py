@@ -4,11 +4,12 @@
 import pandas as pd
 import numpy as np
 
-actors = pd.read_csv("./name.tsv", sep="\t", header=0)
-titles = pd.read_csv("./title.tsv", sep="\t", header=0)
-ratings = pd.read_csv("./ratings.tsv", sep="\t", header=0)
+actors = pd.read_csv("./name.tsv", sep="\t", header=0, index_col=0)
+titles = pd.read_csv("./title.tsv", sep="\t", header=0, index_col=0)
+ratings = pd.read_csv("./ratings.tsv", sep="\t", header=0, index_col=0)
 
 row_i = 0
+#actors = actors.iloc[:150, :]
 
 def calculate_genre_score(row):
     global row_i
@@ -19,12 +20,12 @@ def calculate_genre_score(row):
     # Actor is known for
     find_titles = row.knownForTitles.split(",")
     # Get titles
-    knownfor = titles.loc[titles.tconst.isin(find_titles)][["tconst", "genres"]]
+    knownfor = titles.loc[titles.index.isin(find_titles)]["genres"]
 
     genre_scores = {}
-    for _, row in knownfor.iterrows():
-        r = ratings.loc[ratings.tconst == row.tconst].averageRating.iloc[0]
-        gs = row.genres.split(",")
+    for tconst, gs in knownfor.items():
+        r = ratings.loc[tconst].averageRating
+        gs = gs.split(",")
         for g in gs:
             genre_scores.setdefault(g, []).append(r)
 
@@ -36,5 +37,5 @@ def calculate_genre_score(row):
 print(actors.shape)
 actors["genre_score"] = actors.apply(calculate_genre_score, axis=1)
 
-scores = actors[["nconst", "genre_score"]]
-scores.to_csv("genre_scores.tsv", sep="\t")
+scores = actors["genre_score"]
+scores.to_csv("genre_scores.tsv", sep="\t", header=True)

@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 
 print("Loading data")
-data = pd.read_csv("./name.basics.tsv", sep="\t", header=0)
+data = pd.read_csv("./name.basics.tsv", sep="\t", header=0, index_col=0)
 
 print("Converting")
 def find_gender(row):
