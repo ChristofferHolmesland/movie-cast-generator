@@ -444,12 +444,8 @@ INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\newtx\ntxsym.tfm
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\newtx\ntxsyc.tfm
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\newtx\ntxexa.tfm
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\libertine\LinLibertineT-tlf-sc-t1.tfm
-INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\background.tex
-INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\background.tex
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\relatedwork.tex
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\relatedwork.tex
-INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\hadoop.tex
-INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\hadoop.tex
 INPUT C:\Program Files\MiKTeX 2.9\fonts\vf\public\libertine\LinBiolinumTB-tlf-t1.vf
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\libertine\LinBiolinumTB-tlf-t1--base.tfm
 INPUT C:\Users\Christoffer\AppData\Local\MiKTeX\2.9\pdftex\config\pdftex.map
@@ -482,6 +478,10 @@ INPUT C:\Program Files\MiKTeX 2.9\fonts\vf\public\newtx\nxlmi.vf
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\newtx\LibertineMathMI.tfm
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\newtx\NewTXMI.tfm
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\newtx\stxscr.tfm
+INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\background.tex
+INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\background.tex
+INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\hadoop.tex
+INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\hadoop.tex
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\method.tex
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\method.tex
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\evaluation.tex
@@ -489,15 +489,15 @@ INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\evaluation
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\inconsolata\t1zi4.fd
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\inconsolata\t1zi4.fd
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\inconsolata\t1-zi4r-4.tfm
+INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\libertine\LinBiolinumT-tlf-t1.tfm
+INPUT C:\Program Files\MiKTeX 2.9\fonts\vf\public\libertine\LinBiolinumT-tlf-t1.vf
+INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\libertine\LinBiolinumT-tlf-t1--base.tfm
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\data\data-unoptimized.csv
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\data\data-optimized.csv
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\conclusion.tex
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\conclusion.tex
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\citations.tex
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\citations.tex
-INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\libertine\LinBiolinumT-tlf-t1.tfm
-INPUT C:\Program Files\MiKTeX 2.9\fonts\vf\public\libertine\LinBiolinumT-tlf-t1.vf
-INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\libertine\LinBiolinumT-tlf-t1--base.tfm
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\latex.tex
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\latex.tex
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\libertine\LinLibertineT-tlf-t1.tfm
@@ -511,10 +511,10 @@ INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\fig\RegisterOp
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\fig\RegisterOperations.jpg
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\further.tex
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\tex\further.tex
+INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\main.bbl
+INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\main.bbl
 INPUT C:\Program Files\MiKTeX 2.9\fonts\vf\public\libertine\LinLibertineT-tlf-t1.vf
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\libertine\LinLibertineT-tlf-t1--base.tfm
-INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\main.bbl
-INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\main.bbl
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\main.aux
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\main.out
 INPUT c:\Users\Christoffer\Documents\DAT500\dat500-project\report\main.out
