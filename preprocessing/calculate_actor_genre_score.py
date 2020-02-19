@@ -9,7 +9,7 @@ titles = pd.read_csv("./title.tsv", sep="\t", header=0, index_col=0)
 ratings = pd.read_csv("./ratings.tsv", sep="\t", header=0, index_col=0)
 
 row_i = 0
-#actors = actors.iloc[:150, :]
+actors = actors.iloc[:2500, :]
 
 def calculate_genre_score(row):
     global row_i
@@ -24,6 +24,11 @@ def calculate_genre_score(row):
 
     genre_scores = {}
     for tconst, gs in knownfor.items():
+        if not tconst in ratings.index:
+            # If they have acted in something that isn't published yet,
+            # then the title with id tconst will not have a rating.
+            continue
+
         r = ratings.loc[tconst].averageRating
         gs = gs.split(",")
         for g in gs:
