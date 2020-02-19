@@ -1,0 +1,38 @@
+Here you evaluate your work using experiments. You start
+again with a very short summary of the section. The typical
+structure follows.
+
+\subsection{Experimental setup}
+Specify the context and setup of your experiments. This includes e.g.~what hardware (VMs) you are running on, what operating system these machines are running, how they are connected, ...
+
+Also explain how you generate load for your system and what parameters you used here. The general idea is to include enough information for others to reproduce your experiments. To that end, you should provide a detailed set of instructions for repeating your experiments. These instructions should not be included in the report, but should be provided as part of the source code repository on GitHub, typically as the \texttt{README.md} file, or as Shell scripts or Ansible scripts.
+
+If your experiments give strange or unexpected results, analyze, profile and debug your code. \textbf{Do not simply re-run experiments until they give the expected results.}
+
+Finally, running experiments is very time consuming and you may need to go through multiple rounds of experiment, debugging and optimization. \textbf{Do not delay running experiments until the end of your project period.} 
+
+\subsection{Results}
+The results of your experiments. Compare different variants of your design (e.g.~with and without optimizations) or compare performance to other designs or systems. Plots should show the average over multiple runs (at least 10 as a rule of thumb), including error bars, percentiles or min/max values.
+
+Discuss the plot and extract the overall performance. Do not repeat all numbers in the text, but mention relevant differences in numbers, e.g.~our optimization improves throughput by 26\%.
+Discuss how the results validate or contradict your assumptions.
+
+Perform experiments to evaluate your system under operating normal conditions, when experiencing failures or attacks, or with different workloads.
+
+Figure~\ref{fig:graph} shows a graph generated with \texttt{pgfplots} from 
+experiment data.
+\begin{figure}
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel=Throughput ($\times 1000$ Ops/sec),
+    ylabel=Latency (ms),
+    legend entries={baseline, optimized},
+]
+%The mockup experiment data is stored in a csv file, and imported here.
+\addplot table [x=throughput, y=latency, col sep=comma] {data/data-unoptimized.csv};
+\addplot table [x=throughput, y=latency, col sep=comma] {data/data-optimized.csv};
+\end{axis}
+\end{tikzpicture}
+\caption{A graph showing latency and throughput of a baseline and optimized implementation. The axes show latency in milliseconds, and throughput in thousand operations per second. Data is made up.}
+\label{fig:graph}
+\end{figure}

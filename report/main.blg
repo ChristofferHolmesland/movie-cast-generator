@@ -1,0 +1,16 @@
+This is BibTeX, Version 0.99dThe top-level auxiliary file: main.aux
+The style file: ACM-Reference-Format.bst
+Database file #1: sample-bibliography.bib
+Warning--entry type for "dplg" isn't style-file defined
+--line 3 of file sample-bibliography.bib
+Warning--entry type for "zookeeperWeb" isn't style-file defined
+--line 107 of file sample-bibliography.bib
+Warning--empty publisher in chubby
+Warning--empty address in chubby
+Warning--empty address in aTextbook
+Warning--empty publisher in internetPaths
+Warning--empty address in internetPaths
+Warning--empty publisher in zookeeper
+Warning--empty address in zookeeper
+Warning--page numbers missing in both pages and numpages fields in zookeeper
+(There were 10 warnings)

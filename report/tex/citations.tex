@@ -1,0 +1,80 @@
+It is important that you correctly refer to sources. 
+
+\begin{itemize}
+\item If you describe background, according to some textbook, cite that textbook. \emph{See Example~\ref{def:consensus} below.}
+\item If you make a claim about trends in industry or research, add citations to validate the claim. \emph{See Example~\ref{ex:trend} below.}
+\item \textbf{Do not copy paste text from any source into your report without citation. It will be considered plagiarism.}
+\item Always use the tilde character between the text and the cite command, e.g.:\begin{verbatim}
+DBLP~\cite{dplg}
+\end{verbatim}
+The tilde inserts a space, but prevents line break between the text and citation.
+\item For correct citations we recommend that you export bibtex entries from DBLP~\cite{dplg}. 
+%@Hein: ACM produces crappy doi-urls for non ACM publications. I do believe that there are few papers that are part of the ACM-DL and not in DBLP.
+But make sure to update the bibtex entries to adhere to the following rules.
+\end{itemize}
+
+Here are some rules to be followed for your bibliography:
+
+\begin{itemize}
+\item Make sure titles are correctly capitalized.
+
+%You can export all nsdi citations from DBLP, accordingly this should not be a problem.
+% \item Make sure abbreviations are consistent (e.g., is NSDI spelled out or
+% not?) - using the @abbrev function in latex helps here.
+
+\item Make sure there is enough info for a reader to find the document: authors
+plus title isn't enough.
+
+\item Don't blindly copy and paste ACM bibtex entries without fixing them:
+
+- they list "New York, NY" as the address field, which means that all ACM
+conferences look like they took place there; just delete this, or - better
+
+- replace it with where the conference took place, which is much more
+helpful to the reader than the publisher's address
+
+- they have a truly weird idea about how to capitalize conference names;
+just correct this (consistently)
+
+* IEEE is equally bad, and uses a partially-inverted form of conference
+names.
+
+* Please actually review the bibliography before submitting your paper!
+\end{itemize}
+
+%@Leander: Move this to the Latex part:
+
+And while you are at it, please:
+
+\begin{itemize}
+\item Add include{mathpmtc} in the main LaTeX file, so you don't have
+math stuff in a different font than the main text. 
+%We could simply add this to the template if not already done.
+
+\item Always use the tilde character between the number and unit, e.g. 100~Mbps or 53~ms. 
+The tilde inserts a space, but prevents line break between the number and unit.
+
+\item Never put SI units in italics. 
+
+\item Do differentiate between bits (b) and bytes (B), and between powers of 10~(MB) and 2~(MiB).
+
+\item Avoid things like: "We refer the reader to [42]." That is, don't use citations as nouns.
+\end{itemize}
+
+
+\begin{example}
+\label{def:consensus}
+Consensus is a distributed programming abstraction that fulfills the following properties~\cite{aTextbook}:
+\begin{description}
+\item[Termination]
+\item[Validity]
+\item[Integrity]
+\item[Agreement]
+\end{description}
+\end{example}
+
+\noindent
+\begin{example}
+\label{ex:trend} Consensus systems build a fundamental part of todays cloud-computing infrastructure~\cite{spanner,chubby,zookeeper,zookeeperWeb}.
+\end{example}
+
