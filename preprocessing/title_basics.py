@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 
 print("Loading data")
-data = pd.read_csv("./title.basics.tsv", sep="\t", header=0)
+data = pd.read_csv("./title.basics.tsv", sep="\t", header=0, index_col=0)
 
 print("Converting")
 
@@ -23,7 +23,7 @@ data["titleType"] = data["titleType"].apply(find_movies)
 data["genres"] = data["genres"].apply(replace_missing)
 data.dropna(subset=("titleType", "genres"), inplace=True)
 
-data.drop(columns=["originalTitle", "isAdult", "startYear", "endYear", "runtimeMinutes"], inplace=True)
+data.drop(columns=["originalTitle", "isAdult", "startYear", "endYear", "runtimeMinutes", "titleType", "primaryTitle"], inplace=True)
 
 print("Saving")
 data.to_csv("title.tsv", sep="\t")
