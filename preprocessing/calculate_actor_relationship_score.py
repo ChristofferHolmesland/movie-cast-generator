@@ -5,7 +5,7 @@
 import pandas as pd
 import numpy as np
 
-data = pd.read_csv("./principals.tsv", sep="\t", header=0)
+data = pd.read_csv("../data/principals.tsv", sep="\t", header=0)
 data.drop(columns="Unnamed: 0", inplace=True)
 
 grouped = data.groupby(["tconst"]).nconst.apply(lambda rows: ",".join(rows))
@@ -29,4 +29,4 @@ df = df.reindex(labels=keys)
 df["unique"] = pd.Series([len(set(rels[key])) for key in keys], index=df.index)
 df["total"] = pd.Series([len(rels[key]) for key in keys], index=df.index)
 
-df.to_csv("./actor_relationships.tsv", sep="\t", header=True)
+df.to_csv("../data/actor_relationships.tsv", sep="\t", header=True)
