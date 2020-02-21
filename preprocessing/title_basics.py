@@ -10,7 +10,7 @@ data = pd.read_csv("../data/title.basics.tsv", sep="\t", header=0, index_col=0)
 print("Converting")
 
 def find_movies(row):
-    if row in ("movie", "tvMovie", "short", "tvShort"):
+    if row in ("movie", "tvMovie"):
         return row
     return np.nan
 
