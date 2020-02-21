@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 
 print("Loading data")
-data = pd.read_csv("./name.basics.tsv", sep="\t", header=0, index_col=0)
+data = pd.read_csv("../data/name.basics.tsv", sep="\t", header=0, index_col=0)
 
 print("Converting")
 def find_gender(row):
@@ -41,4 +41,4 @@ data.dropna(subset=("gender", ), inplace=True)
 data.drop(columns="primaryProfession", inplace=True)
 
 print("Saving")
-data.to_csv("name.tsv", sep="\t")
+data.to_csv("../data/name.tsv", sep="\t")
