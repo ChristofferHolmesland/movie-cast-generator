@@ -8,9 +8,7 @@ Warning--entry type for "zookeeperWeb" isn't style-file defined
 Warning--empty publisher in chubby
 Warning--empty address in chubby
 Warning--empty address in aTextbook
-Warning--empty publisher in internetPaths
-Warning--empty address in internetPaths
 Warning--empty publisher in zookeeper
 Warning--empty address in zookeeper
 Warning--page numbers missing in both pages and numpages fields in zookeeper
-(There were 10 warnings)
+(There were 8 warnings)

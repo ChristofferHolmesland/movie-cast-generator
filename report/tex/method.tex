@@ -1,23 +1,14 @@
-Now comes the "beef" of the paper, where you explain what
-you did. Again, organize it in paragraphs with titles. As in
-every section you start with a very brief overview of the
-section. 
+\subsection{Design} 
+There are three parts to the system. First we had to get all of the required data. Most of it can be downloaded from the IMDB website(source to imdb/interfaces). This data does not include actor gender, movie plot or box office values. To determine the gender we used the list of known professions for every person. If they are known for being a actor they are assigned the label "0". Actresses are assigned the label "1". Some people in the dataset have never acted, for example directors or producers. They are removed from the data. There is no way to find the movie plot in the datasets, so we had to find an external source. One alternative is to use webscraping on the IMDB website. We tried doing this but quickly realized that it would not be possible for us because they stop responding to requests after too many in a given time period. We were able to get about 9~000 requests per hour. Since the dataset includes about 500~000 movies this would not be a good solution. It was also not possible for us to know if there were other rate limits e.g. 50~000 requests per day. Instead we used the OMDB API (source) to retrieve the movie plots. Using this API we were able to get all of the plots in 1 hour and 43 minutes. Our original idea was to also make a prediction on the box office value. After using the OMDB API to also find the box office values we saw that only 6381 movies have this value. We do not believe this is enough data to make proper predictions on (why?) so we did not use this data. Instead we decided to generate a prediction for the IMDB user score because this value is available for all of the movies in our dataset.
 
-This section may vary significantly depending on your topic.
-You may also choose to make the different parts individual sections.
-Here is a more general structure:
-
-\subsection{Design} Concisely present your design. Focus on novel aspects,
+Concisely present your design. Focus on novel aspects,
 but avoid implementation details. Use pseudo-code and figures to better
 explain your design, but also present and explain these in the text.
 %
 To assist in evaluating your design choices, it may be relevant to describe
 several distinct \textit{design alternatives} that can later be compared.
 
-\subsection{Analysis} Argue for the correctness of your design and 
-why you expect it to perform better than previous work.
-%
-If applicable, mention how your design relates to theoretical bounds.
+\subsection{Analysis}
 
 \subsection{Optimization} Explain how you optimized your design and 
 adjusted it to specific situations.
@@ -47,10 +38,3 @@ why the optimized code works better.
 \end{itemize}
 
 Make sure to cite all external resources used.
-
-
-
-
-
-The IMDB datasets does not contain all of the information we needed to rank actors. The missing information was actor gender,
-movie summary and movie box office. To get this information a combination of the python library imdbpy (source) and web-scraping was used.
