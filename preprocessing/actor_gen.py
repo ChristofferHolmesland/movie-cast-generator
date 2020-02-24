@@ -13,7 +13,6 @@ with open(file_path,'rt') as f:
         if line.split()[0] == 'plot:' :
             plot=' '.join(line.split()[1:])
 
-
 genre_data=pd.read_csv('C:/Users/malav/Dropbox/dat500-project/genre_scores.tsv', sep="\t", header= 0, index_col=0)
 actor_data=pd.read_csv('C:/Users/malav/Dropbox/dat500-project/name.tsv', sep="\t", header= 0, index_col=0)
 summary_data=pd.read_csv('C:/Users/malav/Dropbox/dat500-project/summary_box_office.tsv', sep="\t", header= 0, index_col=0)
@@ -41,40 +40,36 @@ actor['gender'].loc[actor['gender'] == 'Female'] = 1.0
 
 #print(actor)
 #print(actor_data)
-
 #print(actor_data.loc[(actor_data['gender'] == actor.values[0][0]) & (actor_data["age"]==actor.values[0][1])])
-
 #print(actor.values[0][0])
 
 
 #Comparing input actor dataframe and names.tsv dataframe 
 match=[]
+fin=[]
 for i in range(0,len(actor.values)):
     match=actor_data.loc[(actor_data['gender'] == actor.values[i][0]) & (actor_data["age"]==actor.values[i][1])]
     actor_id=match.index
-    #for ID in actor_id:
+    lst=[]
+    for ID in actor_id[:10]:
+        lt=[]
+        f=(genre_data.loc[(genre_data.index == (ID))])
+        f['genre_score']=f['genre_score'].apply(ast.literal_eval)
+        for g in genre:
+            for key, value in f['genre_score'][0].items():
+                if g.strip() == key:
+                    kv={key:value}
+                    lst.append ({ID: kv})
+                    #lt.append(kv)
+                #lst.append({ID:lt})
+    dic={i:lst}
+    fin.append(dic)
 
-li=['nm9735552', 'nm9737044', 'nm9806928', 'nm9818684']
-for l in li:
-    f=(genre_data.loc[(genre_data.index == (l))])
+print(fin)
 
-f['genre_score']=f['genre_score'].apply(ast.literal_eval)
-
-#print(f['genre_score'][0].find('Action'))
-print(type(f['genre_score'][0]))
-
-for g in genre:
-    print(str(g))
-    #if str(g) in f
-    #i=((f['genre_score'])
-    #print(i)
-    #print(f['genre_score'][0][i+len(g)+3:i+len(g)+6])
+#li=['nm9735552', 'nm9737044', 'nm9806928', 'nm9818684','nm9822023', 'nm9822023']
+    
 
 
-
-#f['score'] = [x[0]['Adventure'] for x in f['genre_score']]
-
-#i=((f['genre_score'][0].find('Drama')))
-#print(f['genre_score'][0][i+len('Drama')+3:i+len('Drama')+6])
 
 
