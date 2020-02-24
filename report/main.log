@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2020.2.17)  19 FEB 2020 11:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2020.2.17)  24 FEB 2020 12:20
 entering extended mode
 **c:/Users/Christoffer/Documents/DAT500/dat500-project/report/main.tex
 (c:/Users/Christoffer/Documents/DAT500/dat500-project/report/main.tex
@@ -1161,19 +1161,23 @@ LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
 (Font)              scaled to size 9.0pt on input line 43.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
 (Font)              scaled to size 10.95pt on input line 43.
- (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/abstract.tex) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/introduction.tex
+ (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/abstract.tex)
+Overfull \hbox (15.70616pt too wide) in paragraph at lines 2--43
+\T1/LinuxLibertineT-TLF/b/n/9 doc-u-ment.  \T1/LinuxLibertineT-TLF/m/n/9 (-20) In this pa-per we show how we used data from IMDB(source)
+ []
+
+(c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/introduction.tex
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 9.0pt on input line 8.
+(Font)              scaled to size 9.0pt on input line 5.
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 9.0pt on input line 40.
+(Font)              scaled to size 9.0pt on input line 20.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/sc' will be
-(Font)              scaled to size 9.0pt on input line 40.
-) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/relatedwork.tex [1.1{C:/Users/Christoffer/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
+(Font)              scaled to size 9.0pt on input line 20.
+) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/relatedwork.tex) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/background.tex) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/hadoop.tex) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/method.tex [1.1{C:/Users/Christoffer/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
 
-]) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/background.tex) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/hadoop.tex) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/method.tex
-Underfull \vbox (badness 6396) has occurred while \output is active []
+]) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/evaluation.tex
+Underfull \vbox (badness 1221) has occurred while \output is active []
 
-) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/evaluation.tex
 LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 8.
  ("C:\Program Files\MiKTeX 2.9\tex/latex/inconsolata\t1zi4.fd"
 File: t1zi4.fd 2018/01/14 T1/zi4 (Inconsolata)
@@ -1184,18 +1188,17 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `zi4' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
-(Font)              scaled to size 9.0pt on input line 12.
- [2.2]
 PGFPlots: reading {data/data-unoptimized.csv}
 PGFPlots: reading {data/data-optimized.csv}
-) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/conclusion.tex) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/citations.tex) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/latex.tex
+) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/conclusion.tex) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/citations.tex
+LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
+(Font)              scaled to size 9.0pt on input line 6.
+ [2.2]) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/latex.tex
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
 (Font)              scaled to size 7.3pt on input line 1.
- [3.3]
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
 (Font)              scaled to size 5.5pt on input line 4.
-<fig/RegisterOperations.jpg, id=148, 1597.97pt x 1258.7025pt>
+<fig/RegisterOperations.jpg, id=130, 1597.97pt x 1258.7025pt>
 File: fig/RegisterOperations.jpg Graphic file (type jpg)
 <use fig/RegisterOperations.jpg>
 Package pdftex.def Info: fig/RegisterOperations.jpg  used on input line 25.
@@ -1205,7 +1208,7 @@ Overfull \hbox (2.89413pt too wide) in paragraph at lines 30--32
 []\T1/LinuxLibertineT-TLF/m/n/9 (-20) You can cre-ate graphs from your experiment-data us-ing \T1/zi4/m/n/9 pgfplots\T1/LinuxLibertineT-TLF/m/n/9 (-20) .
  []
 
-) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/further.tex
+) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\tex/further.tex [3.3]
 Overfull \hbox (11.8236pt too wide) in paragraph at lines 3--4
 \T1/LinuxLibertineT-TLF/m/n/9 (-20) legacy / publications / library / proceedings / dsl97 / good _ paper . html$[] 
  []
@@ -1221,65 +1224,65 @@ Overfull \hbox (9.83272pt too wide) in paragraph at lines 5--6
  []
 
 
-Overfull \hbox (12.52817pt too wide) in paragraph at lines 6--7
+Overfull \hbox (8.34317pt too wide) in paragraph at lines 6--7
 []\T1/LinuxLibertineT-TLF/m/n/9 (-20) This tem-plate is in-spired by a tem-plate from Markus Püschel [[]]. 
  []
 
 ) (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\main.bbl
-LaTeX Info: Redefining \tempurl on input line 68.
-LaTeX Info: Redefining \tempurl on input line 85.
-LaTeX Info: Redefining \tempurl on input line 114.
-LaTeX Info: Redefining \tempurl on input line 127.
-LaTeX Info: Redefining \tempurl on input line 140.
-LaTeX Info: Redefining \tempurl on input line 158.
-LaTeX Info: Redefining \tempurl on input line 174.
+LaTeX Info: Redefining \tempurl on input line 67.
+LaTeX Info: Redefining \tempurl on input line 96.
+LaTeX Info: Redefining \tempurl on input line 109.
+LaTeX Info: Redefining \tempurl on input line 122.
+LaTeX Info: Redefining \tempurl on input line 138.
 
-Underfull \hbox (badness 5345) in paragraph at lines 168--177
+Underfull \hbox (badness 7576) in paragraph at lines 132--141
 []\T1/LinuxLibertineT-TLF/m/n/7 (+20) Patrick Hunt, Ma-hadev Konar, Flavio Paiva Jun-queira, and Ben-jamin
  []
 
 
-Underfull \hbox (badness 1852) in paragraph at lines 168--177
+Underfull \hbox (badness 2781) in paragraph at lines 132--141
 \T1/LinuxLibertineT-TLF/m/n/7 (+20) Reed. 2010.  ZooKeeper: Wait-free Co-or-di-na-tion for Internet-scale Sys-
  []
 
 
-Underfull \hbox (badness 4096) in paragraph at lines 168--177
+Underfull \hbox (badness 5741) in paragraph at lines 132--141
 \T1/LinuxLibertineT-TLF/m/n/7 (+20) tems. In \T1/LinuxLibertineT-TLF/m/it/7 (+20) 2010 USENIX An-nual Tech-ni-cal Con-fer-ence, Boston, MA, USA,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 168--177
+Underfull \hbox (badness 10000) in paragraph at lines 132--141
 \T1/LinuxLibertineT-TLF/m/it/7 (+20) June 23-25, 2010\T1/LinuxLibertineT-TLF/m/n/7 (+20) .   []$https : / / www . usenix . org / conference / usenix-[]atc-[]10 /
  []
 
-LaTeX Info: Redefining \tempurl on input line 196.
+LaTeX Info: Redefining \tempurl on input line 160.
 
-Underfull \hbox (badness 10000) in paragraph at lines 190--199
-[]$\T1/LinuxLibertineT-TLF/m/n/7 (+18) https : / / www . inf . ethz . ch / personal / markusp / teaching / 263-[]2300-[]ETH-[]spring11 /
+Underfull \hbox (badness 10000) in paragraph at lines 154--163
+[]$\T1/LinuxLibertineT-TLF/m/n/7 (+20) https : / / www . inf . ethz . ch / personal / markusp / teaching / 263-[]2300-[]ETH-[]spring11 /
  []
 
-) [4.4 <c:/Users/Christoffer/Documents/DAT500/dat500-project/report/fig/RegisterOperations.jpg>]
+) [4.4
+
+ <c:/Users/Christoffer/Documents/DAT500/dat500-project/report/fig/RegisterOperations.jpg>]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 91.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 91.
  (c:/Users\Christoffer\Documents\DAT500\dat500-project\report\main.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 91.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 91.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 79902D3591F8F75060058C748E92EFE9;2632.
+(rerunfilecheck)             Checksum: 5408619D89BB8F7180F3644B78DDCB13;2632.
  ) 
 Here is how much of TeX's memory you used:
- 39046 strings out of 492482
- 842135 string characters out of 3131007
- 1074237 words of memory out of 3000000
- 42152 multiletter control sequences out of 15000+200000
- 143029 words of font info for 259 fonts, out of 3000000 for 9000
+ 39006 strings out of 492482
+ 841244 string characters out of 3131007
+ 1075237 words of memory out of 3000000
+ 42146 multiletter control sequences out of 15000+200000
+ 138786 words of font info for 237 fonts, out of 3000000 for 9000
  1302 hyphenation exceptions out of 8191
- 81i,20n,138p,855b,2332s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/inconsolata/i4-t1-4.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_oexx6f.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_ncsllp.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_7grukw.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_25tcsq.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/newtx/LibertineMathMI.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/libertine/LinBiolinumT.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/libertine/LinBiolinumTB.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/libertine/LinLibertineT.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/libertine/LinLibertineTB.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/libertine/LinLibertineTI.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/newtx/txsys.pfb>
-Output written on c:/Users\Christoffer\Documents\DAT500\dat500-project\report\main.pdf (4 pages, 567796 bytes).
+ 81i,20n,138p,1739b,2332s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_oexx6f.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/inconsolata/i4-t1-4.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_ncsllp.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_7grukw.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_25tcsq.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/libertine/LinBiolinumT.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/libertine/LinBiolinumTB.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/libertine/LinLibertineT.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/libertine/LinLibertineTB.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/libertine/LinLibertineTI.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/newtx/txsys.pfb>
+Output written on c:/Users\Christoffer\Documents\DAT500\dat500-project\report\main.pdf (4 pages, 560554 bytes).
 PDF statistics:
- 241 PDF objects out of 1000 (max. 8388607)
- 46 named destinations out of 1000 (max. 500000)
+ 227 PDF objects out of 1000 (max. 8388607)
+ 43 named destinations out of 1000 (max. 500000)
  43206 words of extra memory for PDF output out of 51595 (max. 10000000)
 
