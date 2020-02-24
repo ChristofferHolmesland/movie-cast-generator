@@ -4,7 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 import time
 
-data = pd.read_csv("../data/title.tsv", delimiter='\t', header=0, index_col=0)
+data = pd.read_csv("../title.tsv", delimiter='\t', header=0, index_col=0)
 ids = [id[2:] for id in data.index]
 
 im = IMDb()
