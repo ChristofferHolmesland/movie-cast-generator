@@ -18,6 +18,7 @@ def calculate_genre_score(row):
 
     # Actor is known for
     find_titles = row.knownForTitles.split(",")
+    # Should we use principals.tsv instead to get more movies?
     # Get titles
     knownfor = titles.loc[titles.index.isin(find_titles)]["genres"]
 
