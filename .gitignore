@@ -1,3 +1,11 @@
 *.gz
 *.tsv
 *.secret
+*.bbl
+*.blg
+*.aux
+*.fbb_latexmk
+*.out
+*.log
+*.fls
+*main.synctext.gz
