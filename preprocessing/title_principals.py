@@ -10,7 +10,5 @@ data.drop(columns=["ordering", "category", "job", "characters"], inplace=True)
 
 data = data[data.tconst.isin(titles.index)]
 
-# Should also filter actors from names?
-
 print("Saving")
-data.to_csv("../data/principals.tsv", sep="\t")
+data.to_csv("../data/principals.tsv", sep="\t", index=False)
