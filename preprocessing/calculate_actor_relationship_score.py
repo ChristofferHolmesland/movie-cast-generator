@@ -9,10 +9,6 @@ data = pd.read_csv("../data/principals.tsv", sep="\t", header=0)
 data.drop(columns="Unnamed: 0", inplace=True)
 
 grouped = data.groupby(["tconst"]).nconst.apply(lambda rows: ",".join(rows))
-
-#grouped.to_csv("./grouped_actors.tsv", sep="\t", header=True)
-#grouped = pd.read_csv("./grouped_actors.tsv", sep="\t", header=0, index_col=0).nconst
-
 rels = {}
 
 for _, nconsts in grouped.items():
