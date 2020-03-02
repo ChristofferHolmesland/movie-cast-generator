@@ -1,3 +1,3 @@
 genre: , Drama , Romance , Comedy ,
-actors: ; Male, 35 ; Female, 28 ; Male, 30 ;
+actors: ; Male, 35-40 ; Female, 28-30 ; Male, 30 ;
 plot: A romantic doctor Gary is left by his love. A school teacher tries to help him to get back on track. 

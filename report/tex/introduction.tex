@@ -1,57 +1,21 @@
 
 \noindent
-The introduction is different from the abstract; it should elaborate
-more on the context of the work and other aspects. Generally, you can repeat some
-of the main points also in the introduction, but expand and use different words.
 
-To make your report easier to read, we recommend that you write in first person,
-plural, i.e.~write \textit{we}, even if the report is single author.
-This is also to represent that, even though you are writing this on your own,
-your supervisor and possibly others are contributing ideas, suggestions and
-corrections on your report.
-
-What follows is a possible structure of the introduction.
-Note that the structure can be modified, but the content should be the same.
-Introduction and Abstract should fill at most the first page.
-
-\paragraph{Context and Motivation} The first few sentences in the introduction
-is typically a brief description providing context for your work, explaining
-the broader domain of the work. This context should lead into the motivation for
-the work by identifying one or more problems. 
-
-Here is an example from~\cite{zorfu}:
-
-\textit{Traditional desktop applications, such as word processing, email, and photo management are increasingly moving to server-based deployments. However, moving applications to the cloud can reduce availability because Internet path availability averages only two-nines~\cite{internetPaths}. If a user's application state is isolated on a single server, the availability for that user is limited by the path availability between the user's desktop and that server. Hence, to improve availability, application state must be replicated across multiple servers placed in geographically distributed data centers.}
-
-\paragraph{Research Problem} This paragraph further restricts the problem introduced in the motivation to the problem you are addressing. 
-Make sure to explain to the reader 
-what you are doing, why it is important, and why it is non-trivial.
-
-\paragraph{Related Work} Next, you have to give a brief overview
-of related work. For a paper like this, anywhere between 2
-and 8 references. Briefly explain what they do. End the paragraph by
-contrasting their work to what you do, to make it precisely clear what
-your contribution is.
-
-\paragraph{Contribution Summary} 
-It can be a good idea to end the introduction with a summary of your contributions as bullet points.
-For example:
-\begin{itemize}
-\item We implement \paxos using brand new technologies.
-\item We evaluate our implementation both in a WAN and LAN environment and show that it is $1.0001\times$ faster than state of the art.
-\end{itemize}
-It is not necessary to have a paragraph at the end of the introduction, that lists the following sections. 
-
-
-For a low budget movie it is important to have well-known actor. It can increase the box office sales or help attract investors (source stephenfollows).
+\paragraph{Context and Motivation}
+For a low budget movie it is important to have a well-known actor. It can increase the box office sales or help attract investors (source stephenfollows).
 If you are new to the film industry it can be hard to know which actors or actresses will be a good fit for your movie.
 It is possible to use previous movies where you liked the performance of the actor as inspiration, but there are too many movies
 being made that it is not possible to get a proper overview of all the possibilities. Another possibility is to look at websites like
 IMDB (source) to find inspiration. You can use features like the user score of a movie to select actors. We do not consider this
 as a good option because there are too many movies to compare, and in practice you will end up looking at only the top rated movies.
-In this paper we present a solution to the problem of selecting a movie cast. Our system lets the user input a brief summary of their
+
+\paragraph{Research Problem}
+In this report we present a solution to the problem of selecting a movie cast. Our system lets the user input a brief summary of their
 movie and a list of actor characteristics they want the lead actors to have. The system uses data from IMDB to rank possible actors
 and returns a list of suggestions to the user. The rank is based on a combination of past performance, acting relationships and
 a subset of the actor characteristics. 
 
-%Todo Write "Contribution summary"
+\paragraph{Contribution Summary}
+\begin{itemize}
+\item We implement \paxos using brand new technologies.
+\end{itemize}
