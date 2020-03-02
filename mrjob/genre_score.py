@@ -14,6 +14,10 @@ class PreprocessGenreScore(MRJob):
         ]
 
     def reducer_actor(self, actor_id, values):
+        if actor_id == "header":
+            yield key, list(values)[0]
+            return
+
         scores = {}
         for value in values:
             for key in value:
@@ -30,6 +34,10 @@ class PreprocessGenreScore(MRJob):
         yield actor_id, f"{actor_id}\t{avg_scores}"
 
     def reducer_title(self, key, values):
+        if key == "header":
+            yield key, list(values)[0]
+            return
+
         rating = None
         genres = None
         for value in values:
@@ -52,7 +60,8 @@ class PreprocessGenreScore(MRJob):
     def mapper_collect_title(self, _, line):
         values = line.split("\t")
         
-        if values[0] == "tconst":
+        if values[0] == "tconst" and values[1] == "nconst":
+            yield "header", "nconst\tgenre_score"
             return
 
         # ratings.tsv
