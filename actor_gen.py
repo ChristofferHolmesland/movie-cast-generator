@@ -29,34 +29,26 @@ else:
 #generating input actor dataframe
 gender=[]
 ag=[]
-ages=[]
 for l in range(0,len(actors)):
     for i,a in enumerate(actors[l]):
         if a == ',':
             gender.append(actors[l][1:i])
-            ag.append((actors[l][i+2:-1]))   
-    #checking for age range 
-for i in ag:
-    if '-' in i:
-        low=(i.split('-'))[0]
-        up=(i.split('-'))[1]
-        ages.append({'low':int(low),'high':int(up)})
-    elif '-' not in i:
-        ages.append(int(i))
-#print(ages)
-actor=pd.DataFrame({'gender': gender, 'age': ages}) 
+            ag.append(int(actors[l][i+2:-1]))    
+actor=pd.DataFrame({'gender': gender, 'age': ag}) 
 actor['gender'].loc[actor['gender'] == 'Male'] = 0.0
 actor['gender'].loc[actor['gender'] == 'Female'] = 1.0
+
+#print(actor)
+#print(actor_data)
+#print(actor_data.loc[(actor_data['gender'] == actor.values[0][0]) & (actor_data["age"]==actor.values[0][1])])
+#print(actor.values[0][0])
+
 
 #Comparing input actor dataframe and names.tsv dataframe 
 match=[]
 fin=[]
 for i in range(0,len(actor.values)):
-    if type(actor.values[i][1])== dict:
-        for j in range(list(actor.values[i][1].values())[0],list(actor.values[i][1].values())[1]+1):
-            match=(actor_data.loc[(actor_data['gender'] == actor.values[i][0]) & (actor_data["age"]==j)])
-    else:
-        match=(actor_data.loc[(actor_data['gender'] == actor.values[i][0]) & (actor_data["age"]==actor.values[i][1])])
+    match=actor_data.loc[(actor_data['gender'] == actor.values[i][0]) & (actor_data["age"]==actor.values[i][1])]
     actor_id=match.index
     lst=[]
     for ID in actor_id:
@@ -79,3 +71,4 @@ for line in fin:
   outF.write(str(line))
   outF.write("\n")
 outF.close()
+
