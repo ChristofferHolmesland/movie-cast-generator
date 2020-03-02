@@ -10,7 +10,7 @@ class PreprocessTitle(MRJob):
 
     def mapper(self, _, line):
         values = line.split("\t")
-
+        
         # Save header
         if values[0] == "tconst":
             yield "header", "{}\t{}".format(values[0], values[8])

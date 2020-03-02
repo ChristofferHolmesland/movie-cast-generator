@@ -1,30 +1,37 @@
 from mrjob.job import MRJob
 from mrjob.protocol import TextValueProtocol
 
-class PreprocessTitle(MRJob):
+class PreprocessPrincipals(MRJob):
     INPUT_PROTOCOL = TextValueProtocol
     OUTPUT_PROTOCOL = TextValueProtocol
 
-    def reducer(self, _, values):
-        yield _, list(values)[0]
+    def reducer(self, key, values):
+        if key == "header":
+            yield key, list(values)[0]
+        else:
+            values = list(values)
+            if "keep" in values:
+                values.remove("keep")
+                for value in values:
+                    yield key, value
 
     def mapper(self, _, line):
         values = line.split("\t")
 
-        # Save header
-        if values[0] == "tconst":
-            yield "header", "{}\t{}".format(values[0], values[8])
+        # Line belongs to title.tsv
+        if len(values) == 2:
+            if values[0] != "tconst":
+                yield values[0], "keep"
             return
         
-        # Remove titles that are not a movie
-        if values[1] not in ("movie", "tvMovie"):
-            return
- 
-        # Remove movies with missing genre information
-        if values[8] == "\\N":
-            return
+        # Line belongs to title.principals.tsv
 
-        yield values[0], "{}\t{}".format(values[0], values[8])
+        # Save header
+        if values[0] == "tconst":
+            yield "header", "{}\t{}".format(values[0], values[2])
+            return
+        
+        yield values[0], "{}\t{}".format(values[0], values[2])
 
 if __name__ == '__main__':
-    PreprocessTitle.run()
+    PreprocessPrincipals.run()
