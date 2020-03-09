@@ -1,18 +1,17 @@
 import pandas as pd
 import numpy as np 
 import ast
-from collections import defaultdict
-from gensim import corpora
-import logging
 import nltk
+from nltk.stem.snowball import SnowballStemmer
+import re
 from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords
-from gensim import models
-from gensim import similarities
+from sklearn.feature_extraction.text import TfidfVectorizer, TfidfTransformer
+from sklearn.cluster import KMeans
+from sklearn.metrics.pairwise import cosine_similarity
 
 
-logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 file_path=('C:/Users/malav/Desktop/dat500-project/output.txt')
 
@@ -72,68 +71,60 @@ df2=df2.drop(['nconst','boxoffice'],axis=1)
 
 summary=list(df2['summary'])
 
+#Setting all non-str values to 'NA'
+summaries=[]
+for text in summary:
+    if type(text)!= str:
+        summaries.append('NA')
+    else:
+        summaries.append(text)
 
-# Tokenizing and removing stopwrods & punctuations from summary
-tokenizer = RegexpTokenizer(r'\w+')
-stop_words = set(stopwords.words('english')) 
-texts=[]
-for summ in summary:
-    #print(type(summ))
-    if type(summ)== str:
-        tok=tokenizer.tokenize(summ)
-        texts.append([w for w in tok if not w.lower() in stop_words])
+# Define a function to perform both stemming and tokenization
+stemmer = SnowballStemmer("english")
+def tokenize_and_stem(text):
+    
+    # Tokenize by sentence, then by word
+    tokens = [word for sentence in nltk.sent_tokenize(text) for word in nltk.word_tokenize(sentence)]
+    
+    # Filter out raw tokens to remove noise
+    filtered_tokens = [token for token in tokens if re.search('[a-zA-Z]', token)]
+    
+    # Stem the filtered_tokens
+    stems = [stemmer.stem(token) for token in filtered_tokens]
+    return stems
 
-#Tokenizing and removing stopwrods & punctuations from plot
-tokens=tokenizer.tokenize(plot)
-doc = [w for w in tokens if not w.lower() in stop_words] 
+# Instantiate TfidfVectorizer object with stopwords and tokenizer
+# parameters for efficient processing of text
+tfidf_vectorizer = TfidfVectorizer(max_df=0.8, max_features=200000,
+                                 min_df=0.2, stop_words='english',
+                                 use_idf=True, tokenizer=tokenize_and_stem,
+                                 ngram_range=(1,3))
 
-#creating corpus
-dictionary = corpora.Dictionary(texts)
-corpus = [dictionary.doc2bow(text) for text in texts]
+movies=summaries+list(plot)
+# Fit and transform the tfidf_vectorizer with the "plot" of each movie
+# to create a vector representation of the plot summaries
+tfidf_matrix = tfidf_vectorizer.fit_transform([x for x in movies])
 
+#print(tfidf_matrix.shape)
 
-#similarity model (Latent Semantic Indexing)
-lsi = models.LsiModel(corpus, id2word=dictionary, num_topics=2)
+# Create a KMeans object with 5 clusters and save as km
+km = KMeans(n_clusters=5)
 
-# convert the query (plot) to LSI space
-vec_bow = dictionary.doc2bow(doc)
-vec_lsi = lsi[vec_bow]  
+# Fit the k-means object with tfidf_matrix
+km.fit(tfidf_matrix)
 
-# transform corpus to LSI space and index it
-index = similarities.MatrixSimilarity(lsi[corpus])  
-index.save('deerwester.index')
-index = similarities.MatrixSimilarity.load('deerwester.index')
+#corresponding cluster of movies in summaries 
+clusters = km.labels_.tolist()
 
-#Querying 
-sims = index[vec_lsi]  # perform a similarity query against the corpus
-
-#Print the top ten similar summaries to plot
-sims = sorted(enumerate(sims), reverse=False)
-for i, s in enumerate(sims):
-    if i<=9:
-        print(s, summary[i])
-
-'''
-
-stoplist = set('for a of the and to in . , ? ! : ;'.split())
-texts = [
-    [word for word in document.lower().split() if word not in stoplist]
-    for document in summary]
+# Calculate the similarity distance
+similarity_distance = 1 - cosine_similarity(tfidf_matrix)
 
 
-# remove words that appear only once
-frequency = defaultdict(int)
-for text in texts:
-    for token in text:
-        frequency[token] += 1
+def find_similar():
+  vector = similarity_distance[-1, :]
+  most_similar = movies[np.argsort(vector)[1]]
+  return most_similar
 
-texts = [
-    [token for token in text if frequency[token] > 1]
-    for text in texts]
+print(find_similar()) # prints "The Graduate"
 
-dictionary = corpora.Dictionary(texts)
-corpus = [dictionary.doc2bow(text) for text in texts]
 
-print(corpus)
-
-'''
