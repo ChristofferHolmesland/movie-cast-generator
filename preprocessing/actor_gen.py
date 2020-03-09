@@ -48,6 +48,7 @@ actor=pd.DataFrame({'gender': gender, 'age': ages})
 actor['gender'].loc[actor['gender'] == 'Male'] = 0.0
 actor['gender'].loc[actor['gender'] == 'Female'] = 1.0
 
+
 #Comparing input actor dataframe and names.tsv dataframe 
 match=[]
 fin=[]
