@@ -1,3 +1,5 @@
+#Reads from input and generates possible {actors:genre_scores} for all the input actor descriptions and genres 
+
 import pandas as pd
 import numpy as np 
 import ast
@@ -52,7 +54,7 @@ actor['gender'].loc[actor['gender'] == 'Male'] = 0.0
 actor['gender'].loc[actor['gender'] == 'Female'] = 1.0
 
 
-#Comparing input actor dataframe and names.tsv dataframe 
+#Comparing input actor dataframe and name.tsv dataframe 
 match=[]
 fin=[]
 for i in range(0,len(actor.values)):
@@ -75,9 +77,10 @@ for i in range(0,len(actor.values)):
         f = ast.literal_eval(f.iloc[0])
         # Extract the genres we are looking for
         lt = [{k: f[k]} for k in f if k in genre]
-        # Save them in a dictionary
-        lst[j] = {ID:lt}
-
+        # Save them in a dictionary if len(lt)==len(genre)
+        if len(lt)==len(genre):
+            lst[j] = {ID:lt}
+        
     lst = [l for l in lst if l != None]
 
     dic={i:lst}
@@ -89,5 +92,3 @@ for line in fin:
   outF.write(str(line))
   outF.write("\n")
 outF.close()
-
-'''
