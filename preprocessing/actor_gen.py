@@ -21,6 +21,8 @@ summary_data=pd.read_csv('../data/summary_box_office.tsv', sep="\t", header= 0, 
 #Converting genre_score column to dictionaries 
 genre_data['genre_score'].apply(ast.literal_eval)
 
+#print(type(genre_data['genre_score']))
+
 #Including AGE value in name.tsv dataframe
 if actor_data['deathYear'].dtype != 'int' :
     actor_data['age']=(2020-(actor_data['birthYear']))
@@ -49,6 +51,7 @@ actor=pd.DataFrame({'gender': gender, 'age': ages})
 actor['gender'].loc[actor['gender'] == 'Male'] = 0.0
 actor['gender'].loc[actor['gender'] == 'Female'] = 1.0
 
+
 #Comparing input actor dataframe and names.tsv dataframe 
 match=[]
 fin=[]
@@ -59,6 +62,7 @@ for i in range(0,len(actor.values)):
     else:
         match=(actor_data.loc[(actor_data['gender'] == actor.values[i][0]) & (actor_data["age"]==actor.values[i][1])])
     actor_id=match.index
+
     lst=[None] * len(actor_id)
     genre = [g.strip() for g in genre] # This should only be done once after reading input
     for j, ID in enumerate(actor_id):
@@ -85,3 +89,5 @@ for line in fin:
   outF.write(str(line))
   outF.write("\n")
 outF.close()
+
+'''
