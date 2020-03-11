@@ -20,6 +20,8 @@ summary_data=pd.read_csv('C:/Users/malav/Dropbox/dat500-project/summary_box_offi
 #Converting genre_score column to dictionaries 
 genre_data['genre_score'].apply(ast.literal_eval)
 
+#print(type(genre_data['genre_score']))
+
 #Including AGE value in name.tsv dataframe
 if actor_data['deathYear'].dtype != 'int' :
     actor_data['age']=(2020-(actor_data['birthYear']))
@@ -48,6 +50,7 @@ actor=pd.DataFrame({'gender': gender, 'age': ages})
 actor['gender'].loc[actor['gender'] == 'Male'] = 0.0
 actor['gender'].loc[actor['gender'] == 'Female'] = 1.0
 
+
 #Comparing input actor dataframe and names.tsv dataframe 
 match=[]
 fin=[]
@@ -59,12 +62,22 @@ for i in range(0,len(actor.values)):
         match=(actor_data.loc[(actor_data['gender'] == actor.values[i][0]) & (actor_data["age"]==actor.values[i][1])])
     actor_id=match.index
     lst=[]
+    data=[]
     for ID in actor_id:
         lt=[]
-        f=(genre_data.loc[(genre_data.index == (ID))])
+        index=genre_data.loc[(genre_data['nconst'] == ID)]
+        
+        
+        if len(genre_data.loc[(genre_data.index == (ID))]) >0 :
+            data.append(genre_data['genre_score'])
+        #f=(genre_data.loc[(genre_data.index == (ID))])
+        #data.append(f)
+
+print(data)
+'''
         f['genre_score']=f['genre_score'].apply(ast.literal_eval)
         for g in genre:
-            for key, value in f['genre_score'][0].items():
+            for key, value in f['genre_score'].items():
                 if g.strip() == key:
                     kv={key:value}
                     #lst.append ({ID: kv})
@@ -79,3 +92,5 @@ for line in fin:
   outF.write(str(line))
   outF.write("\n")
 outF.close()
+
+'''
