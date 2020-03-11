@@ -39,5 +39,6 @@ actor_scores = principals.groupby(["nconst"])["tconst"].apply(calc_genre_score)
 
 actor_scores.replace("{}", np.nan, inplace=True)
 actor_scores.dropna(inplace=True)
+actor_scores.rename("genre_score", inplace=True)
 
 actor_scores.to_csv("../data/genre_scores.tsv", sep="\t", header=True)
