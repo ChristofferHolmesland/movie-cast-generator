@@ -8,7 +8,7 @@ ratings = pd.read_csv("../data/ratings.tsv", sep="\t", header=0, index_col=0)
 title_genre_ratings = titles.join(ratings, how="inner")
 
 genre_ratings = \
-    title_genre_ratings.apply(lambda row: {genre: row.averageRating for genre in row.genres.split(",")}, axis=1)
+    title_genre_ratings.apply(lambda row: {genre: (row.averageRating, row.numVotes) for genre in row.genres.split(",")}, axis=1)
 
 row_i = 0
 
@@ -31,7 +31,8 @@ def calc_genre_score(row):
             score[key].append(value)
 
     for key, value in score.items():
-        score[key] = np.mean(value)
+        sum_votes = sum([v[1] for v in value])
+        score[key] = sum([v[1]/sum_votes * v[0] for v in value])
 
     return str(score)
 
