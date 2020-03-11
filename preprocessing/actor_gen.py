@@ -1,8 +1,9 @@
 import pandas as pd
 import numpy as np 
 import ast
+import sys
 
-file_path=('C:/Users/malav/Desktop/dat500-project/input.txt')
+file_path=('../input2.txt')
 
 with open(file_path,'rt') as f:
     for i,line in enumerate(f):
@@ -13,9 +14,9 @@ with open(file_path,'rt') as f:
         if line.split()[0] == 'plot:' :
             plot=' '.join(line.split()[1:])
 
-genre_data=pd.read_csv('C:/Users/malav/Dropbox/dat500-project/genre_scores.tsv', sep="\t", header= 0, index_col=0)
-actor_data=pd.read_csv('C:/Users/malav/Dropbox/dat500-project/name.tsv', sep="\t", header= 0, index_col=0)
-summary_data=pd.read_csv('C:/Users/malav/Dropbox/dat500-project/summary_box_office.tsv', sep="\t", header= 0, index_col=0)
+genre_data=pd.read_csv('../mrjob_data/genre_scores.tsv', sep="\t", header= 0, index_col=0)
+actor_data=pd.read_csv('../data/name.tsv', sep="\t", header= 0, index_col=0)
+summary_data=pd.read_csv('../data/summary_box_office.tsv', sep="\t", header= 0, index_col=0)
 
 #Converting genre_score column to dictionaries 
 genre_data['genre_score'].apply(ast.literal_eval)
@@ -61,33 +62,29 @@ for i in range(0,len(actor.values)):
     else:
         match=(actor_data.loc[(actor_data['gender'] == actor.values[i][0]) & (actor_data["age"]==actor.values[i][1])])
     actor_id=match.index
-    lst=[]
-    data=[]
-    for ID in actor_id:
-        lt=[]
-        index=genre_data.loc[(genre_data['nconst'] == ID)]
-        
-        
-        if len(genre_data.loc[(genre_data.index == (ID))]) >0 :
-            data.append(genre_data['genre_score'])
-        #f=(genre_data.loc[(genre_data.index == (ID))])
-        #data.append(f)
 
-print(data)
-'''
-        f['genre_score']=f['genre_score'].apply(ast.literal_eval)
-        for g in genre:
-            for key, value in f['genre_score'].items():
-                if g.strip() == key:
-                    kv={key:value}
-                    #lst.append ({ID: kv})
-                    lt.append(kv)
-        lst.append({ID:lt})
+    lst=[None] * len(actor_id)
+    genre = [g.strip() for g in genre] # This should only be done once after reading input
+    for j, ID in enumerate(actor_id):
+        # Get the genre dictionary
+        f = genre_data.loc[(genre_data.index == (ID))]["genre_score"]
+        # If the actor has genres we are looking for 
+        if len(f) == 0:
+           continue
+        # Convert to python dictionary
+        f = ast.literal_eval(f.iloc[0])
+        # Extract the genres we are looking for
+        lt = [{k: f[k]} for k in f if k in genre]
+        # Save them in a dictionary
+        lst[j] = {ID:lt}
+
+    lst = [l for l in lst if l != None]
+
     dic={i:lst}
     fin.append(dic)
 
 #Writing into output file
-outF = open("C:/Users/malav/Desktop/dat500-project/output.txt", "w")
+outF = open("../output2.txt", "w")
 for line in fin:
   outF.write(str(line))
   outF.write("\n")

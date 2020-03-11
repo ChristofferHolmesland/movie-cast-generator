@@ -15,8 +15,10 @@ class PreprocessGenreScore(MRJob):
 
     def reducer_actor(self, actor_id, values):
         if actor_id == "header":
-            yield key, list(values)[0]
+            yield "", list(values)[0]
             return
+
+        values = list(values)
 
         scores = {}
         for value in values:
@@ -31,12 +33,14 @@ class PreprocessGenreScore(MRJob):
             n = len(scores[key])
             avg_scores[key] = round(s / n, 4)
 
-        yield actor_id, f"{actor_id}\t{avg_scores}"
+        yield actor_id, "{}\t{}".format(actor_id, avg_scores)
 
     def reducer_title(self, key, values):
         if key == "header":
             yield key, list(values)[0]
             return
+
+        values = list(values)
 
         rating = None
         genres = None
