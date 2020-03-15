@@ -1,4 +1,6 @@
 #Generates a ranked list of actors based on weighted average of genre_score and summary_score 
+#Requires output.txt, principals.tsv, input.txt, title.tsv, summary_box_office.tsv
+#Outputs into primary_actor.tsv
 
 import pandas as pd 
 import numpy as np 
@@ -158,4 +160,5 @@ df_rank_final=df_rank_final.sort_values(by=['score'], ascending= False)
 
 #Writing it to csv
 df_rank_final.to_csv('../data/primary_actor.tsv', sep= '\t', header=True)
+
 

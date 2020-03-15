@@ -1,4 +1,7 @@
-#Reads from input and generates possible {actors:genre_scores} for all the input actor descriptions and genres 
+#Reads from input.txt and generates possible {actors:genre_scores} for all the input actor descriptions and genres 
+#Requires input.txt, genre_scores.tsv, name.tsv, summary_box_office.tsv
+#Outputs into output.txt
+
 
 import pandas as pd
 import numpy as np 
