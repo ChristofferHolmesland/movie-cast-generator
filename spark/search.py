@@ -29,18 +29,18 @@ search_plot = os.environ["search_plot"]
 spark = SparkSession.builder.appName("PySpark Search").getOrCreate()
 
 # Read actors froms file to DataFrame, and calculate their age.
-actors = spark.read.csv("project/spark/actors.tsv/part*", header=True, sep="\t")
-actors = actors.withColumn("age", expr("2020 - birthYear"))
+#actors = spark.read.csv("project/spark/actors.tsv/part*", header=True, sep="\t")
+#actors = actors.withColumn("age", expr("2020 - birthYear"))
 
 # Read movies from file to DataFrame.
 movies = spark.read.csv("project/spark/movies.tsv/part*", header=True, sep="\t")
 
 # Create views to enable SQL statements.
-actors.createOrReplaceTempView("Actors")
+#actors.createOrReplaceTempView("Actors")
 movies.createOrReplaceTempView("Movies")
 
 # Decorator indicating that calc_average_score is an user-defined-function returning a float value.
-@udf("float")
+#@udf("float")
 def calc_average_score(genre_score):
     score = 0
     genre_score = ast.literal_eval(genre_score)
@@ -51,30 +51,38 @@ def calc_average_score(genre_score):
 
 def similarity_score():
     def executor(iterator):
-        #import pkg_resources
         import sys
         if worker_module_path not in sys.path:
             sys.path.append(worker_module_path)
-
-        #import tensorflow_hub as hub
+        
         import numpy as np
+        import pkg_resources
+        import tensorflow_hub as hub
 
-        #sim_model = hub.load(sim_model_url)
+        sim_model = hub.load(sim_model_url)
+
         for row in iterator:
-            for d in pkg_resources.working_set:
-                yield str(d)
-                #yield d.project_name + " " + d.version
-            #sim = sim_model([search_plot, row.summary])
-            #yield str(np.dot(sim[0], sim[1]))
+            sim = sim_model([search_plot, row.summary])
+            yield np.dot(sim[0], sim[1])
+        #sim = sim_model([search_plot, *[row.summary for row in iterator]])
+        #scores = np.inner(sim, sim)
+        
+        #for i in range(1, len(scores)):
+        #    yield scores[0, i]
     return executor
 
-movie_sql = "SELECT tconst, summary as score from Movies WHERE summary != 'N/A'"
-candidate_sql = "SELECT nconst, genre_score FROM Actors WHERE age >= {0} AND age <= {1} AND gender= {2}"
+movie_sql = "SELECT tconst, summary from Movies WHERE summary != 'N/A'"
+#candidate_sql = "SELECT nconst, genre_score FROM Actors WHERE age >= {0} AND age <= {1} AND gender= {2}"
 
-woho = spark.sql(movie_sql).rdd.mapPartitions(similarity_score())
-print(set(woho.collect()))
+partition_scores = spark.sql(movie_sql).rdd.mapPartitions(similarity_score())
+#print(set(partition_scores.take(15)))
 
-#woho.toDF().write.csv("project/spark/simscore.tsv", sep="\t", header=True)
+print(partition_scores.map(lambda x: (float(x), )).toDF().columns)
+
+partition_scores.map(lambda x: (float(x), )).toDF().write.csv("project/spark/simscore.tsv", sep="\t", header=True)
+
+#new_df = movies.withColumn("score", partition_scores.map(lambda x: (float(x), )).toDF())
+#new_df.write.csv("project/spark/simscore.tsv", sep="\t", header=True)
 
 spark.stop()
 """
