@@ -8,7 +8,7 @@ import tensorflow as tf
 import tensorflow_hub as hub
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import expr, udf
+from pyspark.sql.functions import expr, udf, col
 import pyspark.sql.types as sqltypes
 
 worker_module_path = "/home/ubuntu/.local/lib/python3.5/site-packages/"
@@ -56,33 +56,32 @@ def similarity_score():
             sys.path.append(worker_module_path)
         
         import numpy as np
-        import pkg_resources
         import tensorflow_hub as hub
 
         sim_model = hub.load(sim_model_url)
 
-        for row in iterator:
+        for i, row in enumerate(iterator):
             sim = sim_model([search_plot, row.summary])
-            yield np.dot(sim[0], sim[1])
-        #sim = sim_model([search_plot, *[row.summary for row in iterator]])
-        #scores = np.inner(sim, sim)
-        
-        #for i in range(1, len(scores)):
-        #    yield scores[0, i]
+            yield row.tconst, np.dot(sim[0], sim[1])
+
     return executor
 
 movie_sql = "SELECT tconst, summary from Movies WHERE summary != 'N/A'"
 #candidate_sql = "SELECT nconst, genre_score FROM Actors WHERE age >= {0} AND age <= {1} AND gender= {2}"
 
 partition_scores = spark.sql(movie_sql).rdd.mapPartitions(similarity_score())
-#print(set(partition_scores.take(15)))
 
-print(partition_scores.map(lambda x: (float(x), )).toDF().columns)
+sim_scores = partition_scores \
+    .map(lambda row: (row[0], float(row[1]), )) \
+    .toDF() \
+    .select(col("_1").alias("tconst"), col("_2").alias("sim_score"))
 
-partition_scores.map(lambda x: (float(x), )).toDF().write.csv("project/spark/simscore.tsv", sep="\t", header=True)
+movies = movies \
+    .join(sim_scores, movies.tconst == sim_scores.tconst) \
+    .drop(sim_scores.tconst) \
+    .orderBy(["sim_score"], ascending=False)
 
-#new_df = movies.withColumn("score", partition_scores.map(lambda x: (float(x), )).toDF())
-#new_df.write.csv("project/spark/simscore.tsv", sep="\t", header=True)
+movies.write.csv("project/spark/simscore.tsv", sep="\t", header=True)
 
 spark.stop()
 """
