@@ -106,6 +106,28 @@ for i, desc in enumerate(search_actors):
 # Save moveis to disk
 movies.write.csv("project/spark/movies_score.tsv/", sep="\t", header=True)
 
+# Generate the groups and calculate the average score
+final = candidates[0].select("nconst", "score").orderBy(["score"], ascending=False)
+if len(candidates) > 1:
+    for i, cand in enumerate(candidates[1:]):
+        final = final.crossJoin(cand.orderBy(["score"], ascending=False).selectExpr("nconst as nconst{}".format(i), "score as score{}".format(i)))
+
+@udf("string")
+def g_actors(row):
+    actors = [row[i] for i in range(0, len(row), 2)]
+    return ", ".join(actors)
+
+@udf("float")
+def g_score(row):
+    scores = [float(row[i]) for i in range(1, len(row), 2)]
+    return sum(scores) / len(scores)
+
+columns = struct([final[x] for x in final.columns])
+final = final.withColumn("actors", g_actors(columns)).withColumn("group_score", g_score(columns)).select("actors", "group_score")
+final = final.orderBy(["group_score"], ascending=False)
+
+final.write.csv("project/spark/result.tsv/", sep="\t", header=True)
+
 # Disconnect from spark
 spark.stop()
 
