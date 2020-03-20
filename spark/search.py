@@ -8,7 +8,7 @@ import tensorflow as tf
 import tensorflow_hub as hub
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import expr, udf, col
+from pyspark.sql.functions import expr, udf, col, mean
 import pyspark.sql.types as sqltypes
 
 worker_module_path = "/home/ubuntu/.local/lib/python3.5/site-packages/"
@@ -54,6 +54,16 @@ def calc_average_score(genre_score):
         score += genre_score.get(genre, -1000)
     return score / num_search_genres
 
+@udf("float")
+def find_max_sim_score(tconsts)
+    tconsts = ast.literal_eval(tconsts)
+    movs = movies.filter(movies.tconst.isin(tcosnts))
+    max_score = movs.sim_score.max()
+    
+    if max_score:
+        return max_score
+    
+    return -1
 
 # Pre allocate arrays
 scores = [None] * movies.count()
@@ -91,8 +101,10 @@ for i, desc in enumerate(search_actors):
     # Sort them by score in decreasing order
     cand = cand \
         .filter(genre_condition) \
-        .select("nconst", calc_average_score("genre_score").alias("score")) \
+        .select("nconst", calc_average_score("genre_score").alias("avg_genre_score"), find_max_sim_score("tconst").alias("max_sim_score")) \
+        .withColumn("score", mean(cand.avg_genre_score, cand.max_sim_score)) \ 
         .orderBy(["score"], ascending=False)
+    
     candidates.append(cand)
 
     # Save candidates to disk
