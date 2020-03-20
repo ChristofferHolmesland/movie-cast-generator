@@ -1,4 +1,5 @@
 import os
+import time
 import subprocess
 
 genres_raw = ""
@@ -24,6 +25,12 @@ os.environ["search_genres"] = genres
 os.environ["search_actors"] = actors
 os.environ["search_plot"] = plot
 
+start_time = time.time()
+
 # Execute search.py on spark.
 program = "spark-submit --master yarn --deploy-mode client {}".format(os.path.join(os.path.dirname(__file__), "search.py"))
 subprocess.run(program, shell=True)
+
+end_time = time.time()
+
+print("Elapsed time: {} seconds".format(end_time - start_time))
