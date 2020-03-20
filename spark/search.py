@@ -106,10 +106,18 @@ for i, desc in enumerate(search_actors):
 # Save moveis to disk
 movies.write.csv("project/spark/movies_score.tsv/", sep="\t", header=True)
 
+# Number of actors fitting the Intersteller search
+# C0: 704, C1: 406, C2: 455
+# Total number of combinations: 704*406*455 = 130 million combinations.
+# This is too many and will result in memory errors!
+# We can instead take the 30 top rated candidates from each list to get
+# 27000 combinations.
+
 # Generate the groups and calculate the average score
-final = candidates[0].select("nconst", "score")
+final = spark.createDataFrame(candidates[0].select("nconst", "score").head(30), ["nconst", "score"])
 if len(candidates) > 1:
     for i, cand in enumerate(candidates[1:]):
+        cand = spark.createDataFrame(cand.head(30), ["nconst", "score"])
         final = final.crossJoin(cand.selectExpr("nconst as nconst{}".format(i), "score as score{}".format(i)))
 
 @udf("string")
