@@ -55,13 +55,13 @@ def calc_average_score(genre_score):
     return score / num_search_genres
 
 @udf("float")
-def find_max_sim_score(tconsts)
+def find_max_sim_score(tconsts):
     tconsts = ast.literal_eval(tconsts)
     movs = movies.filter(movies.tconst.isin(tcosnts))
-    max_score = movs.sim_score.max()
+    max_scores = movs.agg({"sim_score": "max"}).collect()
     
-    if max_score:
-        return max_score
+    if len(max_score) > 0:
+        return max_scores[0]["max(sim_score)"]
     
     return -1
 
@@ -102,9 +102,10 @@ for i, desc in enumerate(search_actors):
     cand = cand \
         .filter(genre_condition) \
         .select("nconst", calc_average_score("genre_score").alias("avg_genre_score"), find_max_sim_score("tconst").alias("max_sim_score")) \
-        .withColumn("score", mean(cand.avg_genre_score, cand.max_sim_score)) \ 
-        .orderBy(["score"], ascending=False)
+        .orderBy(["avg_genre_score"], ascending=False)
     
+#        .withColumn("score", mean(cand.avg_genre_score, cand.max_sim_score)) \
+
     candidates.append(cand)
 
     # Save candidates to disk

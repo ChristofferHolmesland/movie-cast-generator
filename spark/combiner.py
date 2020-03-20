@@ -14,7 +14,9 @@ principals = spark.read.csv("project/output/title_principals/part*", header=True
 principals = principals \
             .groupby("nconst") \
             .agg(F.collect_list("tconst")) \
-            .select("nconst", F.col("collect_list(tconst)").alias("tcont"))
+            .select("nconst", F.col("collect_list(tconst)").alias("tconst"))
+
+principals = principals.withColumn("tconst", principals.tconst.cast("string"))
 
 # Join movie data to one dataframe
 movies = basics.join(summaries, basics.tconst == summaries.tconst).drop(summaries.tconst)
