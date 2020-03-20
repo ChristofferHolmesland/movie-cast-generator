@@ -8,7 +8,7 @@ import tensorflow as tf
 import tensorflow_hub as hub
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import expr, udf, col, mean, array_contains
+from pyspark.sql.functions import expr, udf, col, mean, array_contains, struct
 import pyspark.sql.types as sqltypes
 
 worker_module_path = "/home/ubuntu/.local/lib/python3.5/site-packages/"
@@ -107,10 +107,10 @@ for i, desc in enumerate(search_actors):
 movies.write.csv("project/spark/movies_score.tsv/", sep="\t", header=True)
 
 # Generate the groups and calculate the average score
-final = candidates[0].select("nconst", "score").orderBy(["score"], ascending=False)
+final = candidates[0].select("nconst", "score")
 if len(candidates) > 1:
     for i, cand in enumerate(candidates[1:]):
-        final = final.crossJoin(cand.orderBy(["score"], ascending=False).selectExpr("nconst as nconst{}".format(i), "score as score{}".format(i)))
+        final = final.crossJoin(cand.selectExpr("nconst as nconst{}".format(i), "score as score{}".format(i)))
 
 @udf("string")
 def g_actors(row):
