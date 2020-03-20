@@ -1,4 +1,5 @@
 from pyspark.sql import SparkSession
+from pyspark.sql import functions as F
 
 # Connect to spark
 spark = SparkSession.builder.appName("PySpark Combiner").getOrCreate()
@@ -7,6 +8,13 @@ spark = SparkSession.builder.appName("PySpark Combiner").getOrCreate()
 summaries = spark.read.csv("project/data/summary_box_office.tsv", header=True, sep="\t")
 basics = spark.read.csv("project/output/title_basics/part*", header=True, sep="\t")
 ratings = spark.read.csv("project/output/title_ratings/part*", header=True, sep="\t")
+principals = spark.read.csv("project/output/title_principals/part*", header=True, sep="\t")
+
+# Convert principals tconst -> nconst to nconst -> [tconst]
+principals = principals \
+            .groupby("nconst") \
+            .agg(F.collect_list("tconst")) \
+            .select("nconst", F.col("collect_list(tconst)").alias("tcont"))
 
 # Join movie data to one dataframe
 movies = basics.join(summaries, basics.tconst == summaries.tconst).drop(summaries.tconst)
@@ -19,6 +27,7 @@ genre_scores = spark.read.csv("project/output/genre_scores/part*", header=True, 
 
 # Join actor data to one dataframe
 actors = actors.join(genre_scores, actors.nconst == genre_scores.nconst).drop(genre_scores.nconst)
+actors = actors.join(principals, actors.nconst == principals.nconst).drop(principals.nconst)
 actors = actors.filter(actors["genre_score"] != "{}")
 
 # Save dataframes to disk

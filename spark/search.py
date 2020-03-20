@@ -63,7 +63,7 @@ sim_arr = [search_plot, None]
 for i, row in enumerate(movies.rdd.toLocalIterator()):
     sim_arr[1] = row.summary
     sim = sim_model(sim_arr)
-    scores[i] = (row.tconst, float(np.dot(sim[0], sim[1])))
+    scores[i] = (row.tconst, 10 * float(np.dot(sim[0], sim[1])))
 
 # Convert similarity scores to a dataframe and delete the local version
 # of the scores.
@@ -103,6 +103,11 @@ movies.write.csv("project/spark/movies_score.tsv/", sep="\t", header=True)
 
 # Disconnect from spark
 spark.stop()
+
+
+
+
+
 
 """
 This would be the better way to calcualte the similarity score because
