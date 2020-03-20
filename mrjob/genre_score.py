@@ -17,7 +17,7 @@ class PreprocessGenreScore(MRJob):
         if actor_id == "header":
             yield "", list(values)[0]
             return
-
+        # [{"Drama": (8.7, 140)}]
         values = list(values)
 
         scores = {}
@@ -29,9 +29,13 @@ class PreprocessGenreScore(MRJob):
 
         avg_scores = {}
         for key in scores:
-            s = sum([float(score) for score in scores[key]])
-            n = len(scores[key])
-            avg_scores[key] = round(s / n, 4)
+            votes = sum([float(score[1]) for score in scores[key]])
+            s = sum([float(score[1])/votes * float(score[0]) for score in scores[key]])
+            avg_scores[key] = round(s, 4)
+            
+            #s = sum([float(score) for score in scores[key]])
+            #n = len(scores[key])
+            #avg_scores[key] = round(s / n, 4)
 
         yield actor_id, "{}\t{}".format(actor_id, avg_scores)
 
@@ -70,7 +74,7 @@ class PreprocessGenreScore(MRJob):
 
         # ratings.tsv
         if len(values) == 3:
-            yield values[0], ["rating", values[1]]
+            yield values[0], ["rating", (values[1], values[2])]
             return
 
         # principals.tsv

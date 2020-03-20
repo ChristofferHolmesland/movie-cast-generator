@@ -10,7 +10,12 @@ class PreprocessRatings(MRJob):
 
     def mapper(self, _, line):
         values = line.split("\t")
-        yield values[0], line
+        if values[0] == "tconst":
+            yield values[0], line
+            return
+
+        if int(values[2]) >= 50: 
+            yield values[0], line
 
 if __name__ == '__main__':
     PreprocessRatings.run()

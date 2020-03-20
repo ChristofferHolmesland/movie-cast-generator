@@ -1,0 +1,5 @@
+Preprocess title_ratings
+ python3 mrjob/title_ratings.py --hadoop-streaming-jar /home/ubuntu/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar -r hadoop hdfs:///user/ubuntu/project/data/title.ratings.tsv --output-dir hdfs:///user/ubuntu/project/output/title_ratings --no-output
+
+Calculate genre scores
+    python3 mrjob/genre_score.py --hadoop-streaming-jar /home/ubuntu/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar -r hadoop hdfs:///user/ubuntu/project/output/title_basics/part* hdfs:///user/ubuntu/project/output/title_principals/part* hdfs:///user/ubuntu/project/output/title_ratings/part* --output-dir hdfs:///user/ubuntu/project/output/genre_scores --no-output
