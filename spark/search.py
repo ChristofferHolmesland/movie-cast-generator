@@ -8,7 +8,7 @@ import tensorflow as tf
 import tensorflow_hub as hub
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import expr, udf, col, mean
+from pyspark.sql.functions import expr, udf, col, mean, array_contains
 import pyspark.sql.types as sqltypes
 
 worker_module_path = "/home/ubuntu/.local/lib/python3.5/site-packages/"
@@ -40,7 +40,7 @@ actors.createOrReplaceTempView("Actors")
 movies.createOrReplaceTempView("Movies")
 
 movie_sql = "SELECT tconst, summary from Movies WHERE summary != 'N/A'"
-candidate_sql = "SELECT nconst, genre_score FROM Actors WHERE age >= {0} AND age <= {1} AND gender= {2}"
+candidate_sql = "SELECT nconst, genre_score, tconst FROM Actors WHERE age >= {0} AND age <= {1} AND gender= {2}"
 
 # Remove movies without a summary
 movies = spark.sql(movie_sql)
@@ -53,17 +53,6 @@ def calc_average_score(genre_score):
     for genre in search_genres:
         score += genre_score.get(genre, -1000)
     return score / num_search_genres
-
-@udf("float")
-def find_max_sim_score(tconsts):
-    tconsts = ast.literal_eval(tconsts)
-    movs = movies.filter(movies.tconst.isin(tcosnts))
-    max_scores = movs.agg({"sim_score": "max"}).collect()
-    
-    if len(max_score) > 0:
-        return max_scores[0]["max(sim_score)"]
-    
-    return -1
 
 # Pre allocate arrays
 scores = [None] * movies.count()
@@ -85,26 +74,29 @@ movies = movies \
     .drop(sim_scores.tconst) \
     .orderBy(["sim_score"], ascending=False)
 
+@udf("array<string>")
+def convert_to_arr(tconsts):
+    return tconsts[1:-1].split(", ")
+
 candidates = []
 for i, desc in enumerate(search_actors):
     # Select actors based on the actor description
     cand = spark.sql(candidate_sql.format(desc[1], desc[2], 1 if desc[0] == "Female" else 0))
-
+    
     # Create condition that will only select actors with all of the genres.
     genre_condition = cand.genre_score.contains(search_genres[0])
     if len(search_genres) > 1:
         for genre in search_genres[1:]:
             genre_condition &= cand.genre_score.contains(genre)
 
-    # Get candidates with all genres
-    # Select the nconst column, and calculate the average genre score
-    # Sort them by score in decreasing order
-    cand = cand \
-        .filter(genre_condition) \
-        .select("nconst", calc_average_score("genre_score").alias("avg_genre_score"), find_max_sim_score("tconst").alias("max_sim_score")) \
-        .orderBy(["avg_genre_score"], ascending=False)
-    
-#        .withColumn("score", mean(cand.avg_genre_score, cand.max_sim_score)) \
+
+    cand = cand.filter(genre_condition).withColumn("tconst", convert_to_arr(cand.tconst))
+    cand = cand.join(movies, array_contains(cand.tconst, movies.tconst)).drop(movies.tconst)
+    d = cand.groupby("nconst").agg({"sim_score": "max"})
+    cand = cand.join(d, cand.nconst == d.nconst).drop(d.nconst)
+    cand = cand.select("nconst", calc_average_score("genre_score").alias("avg_genre_score"), col("max(sim_score)").alias("max_sim_score"))
+    cand = cand.withColumn("score", (cand.avg_genre_score + cand.max_sim_score) / 2)
+    cand = cand.drop_duplicates(["nconst"]).orderBy(["score"], ascending=False)
 
     candidates.append(cand)
 

@@ -33,4 +33,5 @@ subprocess.run(program, shell=True)
 
 end_time = time.time()
 
-print("Elapsed time: {} seconds".format(end_time - start_time))
+elapsed = end_time - start_time
+print("Elapsed time: {} minutes, {} seconds".format(elapsed // 60, elapsed % 60))
