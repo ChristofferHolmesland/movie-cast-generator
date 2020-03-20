@@ -117,7 +117,7 @@ movies.write.csv("project/spark/movies_score.tsv/", sep="\t", header=True)
 final = spark.createDataFrame(candidates[0].select("nconst", "score").head(30), ["nconst", "score"])
 if len(candidates) > 1:
     for i, cand in enumerate(candidates[1:]):
-        cand = spark.createDataFrame(cand.head(30), ["nconst", "score"])
+        cand = spark.createDataFrame(cand.select("nconst", "score").head(30), ["nconst", "score"])
         final = final.crossJoin(cand.selectExpr("nconst as nconst{}".format(i), "score as score{}".format(i)))
 
 @udf("string")
