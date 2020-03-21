@@ -118,6 +118,8 @@ for index,i in enumerate(co_actors1):
             if j in k:
                 t1.append(j)
 
+result = None
+
 #Checking if match exists and then applying grouped average
 if s1:
     for actor in s1:
@@ -188,6 +190,3 @@ elif len(s3)==0:
     result=grouped_average(primary,secondary,tertiary)
 else:
     result=grouped_average(pri,sec,tertiary)
-
-
-
