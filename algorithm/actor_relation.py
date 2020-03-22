@@ -61,8 +61,8 @@ def grouped_average(primary,secondary,tertiary):
     for i in t:
         ter.append(tertiary['Actor ID'].iloc[i])
     
-
-    df_final=pd.DataFrame({'Primary Actor': pri,'Secondary Actor': sec,'Third Actor': ter})
+    print("Saving to file")
+    df_final=pd.DataFrame({'Primary Actor': pri,'Secondary Actor': sec,'Third Actor': ter, 'Score': score})
     df_final.to_csv('../data/final.tsv', sep= '\t', header=True)
     return (df_final)
     
@@ -117,6 +117,8 @@ for index,i in enumerate(co_actors1):
         for k in i:
             if j in k:
                 t1.append(j)
+
+result = None
 
 #Checking if match exists and then applying grouped average
 if s1:
@@ -188,6 +190,3 @@ elif len(s3)==0:
     result=grouped_average(primary,secondary,tertiary)
 else:
     result=grouped_average(pri,sec,tertiary)
-
-
-
