@@ -1,5 +1,5 @@
 #Reads from input.txt and generates possible {actors:genre_scores} for all the input actor descriptions and genres 
-#Requires input.txt, genre_scores.tsv, name.tsv, summary_box_office.tsv
+#Requires: input.txt, genre_scores.tsv, name.tsv, summary_box_office.tsv
 #Outputs into output.txt
 
 
@@ -8,7 +8,7 @@ import numpy as np
 import ast
 import sys
 
-file_path=('../input2.txt')
+file_path=('../input3.txt')
 
 with open(file_path,'rt') as f:
     for i,line in enumerate(f):
@@ -90,7 +90,7 @@ for i in range(0,len(actor.values)):
     fin.append(dic)
 
 #Writing into output file
-outF = open("../output2.txt", "w")
+outF = open("../output3.txt", "w")
 for line in fin:
   outF.write(str(line))
   outF.write("\n")

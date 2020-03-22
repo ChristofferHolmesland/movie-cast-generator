@@ -1,0 +1,3 @@
+genre: , Comedy , Crime , Drama ,
+actors: ; Male, 45-55 ; Male, 35-45 ; Female, 25-35 ;
+plot: A detective investigates the death of a patriarch of an eccentric, combative family.
