@@ -61,8 +61,8 @@ def grouped_average(primary,secondary,tertiary):
     for i in t:
         ter.append(tertiary['Actor ID'].iloc[i])
     
-
-    df_final=pd.DataFrame({'Primary Actor': pri,'Secondary Actor': sec,'Third Actor': ter})
+    print("Saving to file")
+    df_final=pd.DataFrame({'Primary Actor': pri,'Secondary Actor': sec,'Third Actor': ter, 'Score': score})
     df_final.to_csv('../data/final.tsv', sep= '\t', header=True)
     return (df_final)
     
