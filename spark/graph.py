@@ -82,7 +82,70 @@ def cast_string_to_map(col):
 graph = graph.withColumn("edges", cast_string_to_map(graph.edges))
 
 # Example where we find the cost to move between Leonardo DiCaprio
-# and Anne Hathaway.
+# and Christian Bale
 leonardo = "nm0000138"
-anne = "nm0004266"
+christian = "nm0000288"
 
+#step = {
+#   "node": "",
+#   "value": "",
+#   "distance": 0,
+#   "values" = [],
+#   "cost" = (11 - distance) + 10 - (sum(values)/len(values)),
+#   "prev" = step_prev
+#}
+
+# This is the starting step
+step = {
+    "node": leonardo,
+    "value": 0,
+    "distance": 0,
+    "values": [],
+    "cost": 0,
+    "prev": ""
+}
+
+# This is all of the nodes we already found the shortest path to
+finished = {}
+# This is the next steps to consider
+queue = [step]
+while len(queue) > 0:
+    queue.sort(key=lambda x: x["cost"], reverse=True)
+    current = queue.pop()
+    print("Looking at " + current["node"] + ", distance: " + str(current["distance"]) + ", cost: " + str(current["cost"]))
+    if current["node"] == christian:
+        print("Found path to Christian :D")
+        break
+    new_dist = current["distance"] + 1
+    new_values = current["values"]
+    finished[current["node"]] = current["prev"]
+    edges = graph.filter(graph.node == current["node"]).select("edges").collect()[0][0]
+    for edge in edges:
+        if finished.get(edge): continue
+        val = edges[edge]
+        vals = new_values + [val]
+        cost = 10 - (11 - new_dist + 10 - sum(vals)/new_dist) / 2
+        # check if it is already in the queue, if it is and this cost is lower it should be updated
+        replaced = False
+        for q in queue:
+            if q["node"] == edge:
+                if q["cost"] > cost:
+                    print("Replacing")
+                    q["value"] = val
+                    q["distance"] = new_dist,
+                    q["values"] = vals,
+                    q["cost"] = cost
+                    q["prev"] = current["node"]
+                    print(new_dist)
+                    print(q)
+                replaced = True
+                break
+        if replaced: continue
+        queue.append({
+            "node": edge,
+            "value": val,
+            "distance": new_dist,
+            "values": vals,
+            "cost": cost,
+            "prev": current["node"]
+        })
