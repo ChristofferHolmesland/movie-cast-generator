@@ -109,23 +109,36 @@ step = {
 finished = {}
 # This is the next steps to consider
 queue = [step]
+# This is basically Dijkstra's shortest path algorithm
 while len(queue) > 0:
+    # Take the node with the lowest cost
     queue.sort(key=lambda x: x["cost"], reverse=True)
     current = queue.pop()
+    # When you take a node from the queue it means that you have found the shortest path to that node.
     finished[current["node"]] = current
     print("Looking at " + current["node"] + ", distance: " + str(current["distance"]) + ", cost: " + str(current["cost"]))
+    # Stop when we find christian
     if current["node"] == christian:
         print("Found path to Christian :D")
         break
+    # The distance to the next nodes is 1 more than the distance to this node
     new_dist = current["distance"] + 1
+    # Values is a list of the graph values so that we can calculate the average when we are calculating the cost
     new_values = current["values"]
+    # Find all of the edges from this node to it's neighbours
     edges = graph.filter(graph.node == current["node"]).select("edges").collect()[0][0]
     for edge in edges:
+        # If the edge is in finished it means that we already found a shorter path to that node
         if finished.get(edge): continue
         val = edges[edge]
         vals = new_values + [val]
+        # Our scores (genre_score, similarity) are between 0 and 10. So we want this score to be in that range aswell.
+        # The distance (11 - new_dist) means that shorter paths are preferred, A->B->C=9 instead of A->E->F->C=8.
+        # (10 - sum(vals)/new_dist) is 10 - avg of the scores from the graph. The graph values are the opposite
+        # of the rating, so a rating of 7 => 3, 9.5 => 0.5. This is done because we want to find the shortest path between actors.
+        # If we didn't do this then the path would always try to visit every actor before finding christian. This is why we
+        # subtract the average of the two numbers from 10. 
         cost = 10 - (11 - new_dist + 10 - sum(vals)/new_dist) / 2
-        # check if it is already in the queue, if it is and this cost is lower it should be updated
         new_step = {
             "node": edge,
             "value": val,
@@ -136,6 +149,7 @@ while len(queue) > 0:
         }
         
         in_queue = False
+        # Check if it is already in the queue, if it is and this cost is lower it should be updated
         for i in range(len(queue)):
             if queue[i]["node"] == edge:
                 if queue[i]["cost"] > new_step["cost"]:
@@ -143,6 +157,7 @@ while len(queue) > 0:
                 in_queue = True
                 break
         if in_queue: continue
+        # If the edge was not in the queue it is added.
         queue.append(new_step)
 
 actor = christian
