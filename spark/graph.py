@@ -112,13 +112,13 @@ queue = [step]
 while len(queue) > 0:
     queue.sort(key=lambda x: x["cost"], reverse=True)
     current = queue.pop()
+    finished[current["node"]] = current
     print("Looking at " + current["node"] + ", distance: " + str(current["distance"]) + ", cost: " + str(current["cost"]))
     if current["node"] == christian:
         print("Found path to Christian :D")
         break
     new_dist = current["distance"] + 1
     new_values = current["values"]
-    finished[current["node"]] = current["prev"]
     edges = graph.filter(graph.node == current["node"]).select("edges").collect()[0][0]
     for edge in edges:
         if finished.get(edge): continue
@@ -126,26 +126,29 @@ while len(queue) > 0:
         vals = new_values + [val]
         cost = 10 - (11 - new_dist + 10 - sum(vals)/new_dist) / 2
         # check if it is already in the queue, if it is and this cost is lower it should be updated
-        replaced = False
-        for q in queue:
-            if q["node"] == edge:
-                if q["cost"] > cost:
-                    print("Replacing")
-                    q["value"] = val
-                    q["distance"] = new_dist,
-                    q["values"] = vals,
-                    q["cost"] = cost
-                    q["prev"] = current["node"]
-                    print(new_dist)
-                    print(q)
-                replaced = True
-                break
-        if replaced: continue
-        queue.append({
+        new_step = {
             "node": edge,
             "value": val,
             "distance": new_dist,
             "values": vals,
             "cost": cost,
             "prev": current["node"]
-        })
+        }
+        
+        in_queue = False
+        for i in range(len(queue)):
+            if queue[i]["node"] == edge:
+                if queue[i]["cost"] > new_step["cost"]:
+                    queue[i] = new_step
+                in_queue = True
+                break
+        if in_queue: continue
+        queue.append(new_step)
+
+actor = christian
+path = []
+while actor != "":
+    path.append(actor)
+    actor = finished[actor]["prev"]
+path = list(reversed(path))
+print("Leonardo-Christian score: " + str(10 - finished[christian]["cost"]))
