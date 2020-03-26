@@ -10,6 +10,7 @@ import re
 import sys
 import ast
 import glob
+import itertools
 
 #Reading graph.tsv into graph dataframe
 graph=pd.read_csv('../data/graph.tsv', sep='\t')
@@ -138,24 +139,56 @@ def relation_score(a,b,new_graph):
 
     return(score)
 
-
 #All of the IDs from {}_actor.tsv with each other 
-Id1=[]
-Id2=[]
+Id_list = list(itertools.product(*IDs))
+
+#Id_list as a dataframe
+data=pd.DataFrame(Id_list)
+
+#Computing scoresfor all combinations in Id_list as average of all {}_actors
 score=[]
-for i in range(len(IDs)):
-    for j in range(len(IDs[i])):
-        for m in range(i+1,len(IDs)):
-            if (i+1)<(len(IDs)):
-                for k in range(len(IDs[m])):
-                    a=IDs[i][j]
-                    b=IDs[m][k]
-                    Id1.append(a)
-                    Id2.append(b)
-                    score.append(relation_score(a,b,new_graph))
+for i in range(len(data)):
+    x=list(itertools.combinations(list(data.iloc[i]),2))
+    s=0
+    for j in range(len(x)):
+        s=s+relation_score(x[j][0],x[j][1],new_graph)
+    score.append(s/len(x))
 
-#Writing the relation score between two actors into a dataframe
-relation=pd.DataFrame({'ID_1':Id1,'ID_2': Id2,'score':score}).sort_values(by='score', ascending=False)
+#Appending it to the dataframe
+data['r_score']=score
 
+#Removing all zero scored values
+data=data.loc[(data['r_score']!=0)]
+#Sorting it from highest to lowest value 
+data=data.sort_values(by='r_score', ascending=False)
+
+
+#Iteratively merging {}_actors to data
+df=data
+for i in range(len(li)):
+    df=pd.merge(df,li[i], how='inner', left_on=i, right_on='Actor ID')
+    sname=('score_{}'.format(i))
+    df[sname]=df['score']
+    df=df.drop(['Actor ID', 'Avg Genre Score', 'summary_score', 'score'], axis=1)
+
+
+#Finding mean of the gs_score of the {}_actors 
+sname=[]
+for i in range(len(li)):
+    sname.append(('score_{}'.format(i)))
+    
+col = df.loc[: , sname]
+df['gs_score'] = col.mean(axis=1)
+
+#Finding average of the r_score and gs_score and making the final list
+df['final'] = df[["r_score","gs_score"]].mean(axis=1)
+col_list=[i for i in range(len(li))]
+col_list.append('final')
+final_df=df[col_list]
+final_df=final_df.sort_values(by='final', ascending=False)
+final_df
+
+#Outputting the final list as a tsv
+final_df.to_csv('../data/final_output3.tsv', sep= '\t', header=True)
 
 
