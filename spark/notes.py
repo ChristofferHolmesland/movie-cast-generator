@@ -46,22 +46,27 @@ cond = (next4.step1 == christian) | (next4.step2 == christian) | (next4.step3 ==
 next4.filter(cond).count() == 12 798 876
 
 
-@F.udf("float")
-def calc_score(row):
-    # columns 1,3,5... are actor ids
-    # columns 2,4,6... are the values
-    
+
+import pyspark.sql.types as _type
 
 
 def bfs(start, goal, graph, n):
+    def __calc_score(row):
+        # columns 1,3,5... are actor ids
+        # columns 2,4,6... are the values
+        
+    
+    _calc_score = F.udf(__calc_score, _type.FloatType)
+
     current = graph.filter(graph.node == start)
     current = current.select(F.col("node").alias("start"), F.explode(current.edges).alias("step1", "value1"))
     current = current.join(graph, current.step1 == graph.node).drop(graph.node)
     for i in range(1, n):
         current = current.select("*", F.explode(current.edges).alias("step{}".format(i+1), "value{}".format(i+1))).drop(current.edges)
-        
         current = current.join(graph, current["step{}".format(i+1)] == graph.node).drop(graph.node)
     
+    columns = F.struct([current[x] for x in current.columns])
+    current = current.withColumn("score", _calc_score(columns))
     
     return current
 
