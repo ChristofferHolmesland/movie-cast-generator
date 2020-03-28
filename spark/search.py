@@ -11,8 +11,6 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import expr, udf, col, mean, array_contains, struct
 import pyspark.sql.types as sqltypes
 
-worker_module_path = "/home/ubuntu/.local/lib/python3.5/site-packages/"
-
 sim_model_url = "https://tfhub.dev/google/universal-sentence-encoder/4"
 sim_model = hub.load(sim_model_url)
 
@@ -101,10 +99,10 @@ for i, desc in enumerate(search_actors):
     candidates.append(cand)
 
     # Save candidates to disk
-    cand.write.csv("project/spark/candidates{}.tsv/".format(i), sep="\t", header=True)
+    #cand.write.csv("project/spark/candidates{}.tsv/".format(i), sep="\t", header=True)
 
-# Save moveis to disk
-movies.write.csv("project/spark/movies_score.tsv/", sep="\t", header=True)
+# Save movies to disk
+#movies.write.csv("project/spark/movies_score.tsv/", sep="\t", header=True)
 
 # Number of actors fitting the Intersteller search
 # C0: 704, C1: 406, C2: 455
@@ -150,6 +148,8 @@ work is done on every node, but it doesn't seem to work properly (execution time
 Probably because it has to load the tensorflow model for each partition (900MB) which is so
 much of the memory that something has to be saved on disk instead of RAM.
 
+
+worker_module_path = "/home/ubuntu/.local/lib/python3.5/site-packages/"
 
 def similarity_score():
     def executor(iterator):

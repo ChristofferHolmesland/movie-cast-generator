@@ -56,8 +56,8 @@ General idea:
 - Algorithm
     - For each actor pair in the group
         - Find optimal path between the pair
-        - Their relation score should be some something like: constant * ((11 - distance) + 10-avg(value along path))
-    - The group score is then (avg(score) + avg(relation score)) / 
+        - Their relation score should be something like: 10 - cost, when cost = 10 - (11 - distance + 10 - avg(value along path)) / 2
+    - The group score is then (avg(score) + avg(relation score)) / 2
     - If the path finding is slow then maybe we want to do it in the pre-processing instead.
 
 ## Task 3.
