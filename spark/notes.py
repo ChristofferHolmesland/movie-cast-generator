@@ -1,3 +1,28 @@
+# Reading the graph from file
+import ast
+from pyspark.sql import functions as F
+
+graph = spark.read.csv("project/spark/graph.tsv/part*", header=True, sep="\t")
+
+@F.udf("map<string, float>")
+def cast_string_to_map(col):
+    return ast.literal_eval(col)
+
+graph = graph.withColumn("edges", cast_string_to_map(graph.edges))
+
+# Example where we find the cost to move between Leonardo DiCaprio
+# and Christian Bale
+leonardo = "nm0000138"
+christian = "nm0000288"
+
+
+
+
+
+
+
+
+
 # Dijkstra's algorithm on spark
 # This is expected to provide the most accurate results
 # but it will be very slow! 
