@@ -1,4 +1,6 @@
 # Dijkstra's algorithm on spark
+# This is expected to provide the most accurate results
+# but it will be very slow! 
 step = {
     "node": leonardo,
     "value": 0,
@@ -70,6 +72,7 @@ while actor != "":
     actor = finished[actor]["prev"]
 path = list(reversed(path))
 print("Leonardo-Christian score: " + str(10 - finished[christian]["cost"]))
+# The execution time of this is about 7.3 minutes.
 
 
 
@@ -260,3 +263,94 @@ s2 = time.time()
 print(s2 - s)
 # Execution time 166.04 seconds
 # time/relation 20.76 seconds
+
+# It is very clear from these results that bfs_grouped performs better.
+# Let's check whether or not it can be improved even more by using 
+# multiple start nodes.
+
+def bfs_multigrouped(starts, goals, graph, n):
+    # Calculates the cost from start to the goals using the path
+    # in the row, if a path exists.
+    def __calc_score(row):
+        # columns 1,3,5... are actor ids
+        # columns 2,4,6... are the values
+        goal = {g: -1 for g in goals}
+        for i in range(1, len(row), 2):
+            if row[i] in goal and goal[row[i]] == -1:
+                vals = [row[j] for j in range(i+1, 1, -2)]
+                dist = len(vals)
+                goal[row[i]] = (11 - dist + 10 - sum(vals)/dist) / 2
+        return goal
+    _calc_score = F.udf(__calc_score, "map<string,float>")
+    # Start with a dataframe containing only the start nodes
+    current = graph.filter(F.col("node").isin(starts))
+    # Create rows for each edge from the start node
+    current = current.select(F.col("node").alias("start"), F.explode(current.edges).alias("step1", "value1"))
+    # Add the edges of the edges to the dataframe
+    current = current.join(graph, current.step1 == graph.node).drop(graph.node)
+    # For each breadth step
+    for i in range(1, n):
+        # Create rows from the edges of each row
+        current = current.select("*", F.explode(current.edges).alias("step{}".format(i+1), "value{}".format(i+1))).drop(current.edges)
+        # If this is not the last step then add more edges
+        if i == n-1: break
+        current = current.join(graph, current["step{}".format(i+1)] == graph.node).drop(graph.node)
+    # Calculate the score of each row (path)
+    columns = F.struct([current[x] for x in current.columns])
+    current = current.withColumn("score", _calc_score(columns))
+    # Split by start,goal and find maximums
+    current = current.select("start", F.explode(F.col("score")).alias("goal", "score"))
+    maximums = current.groupby(["start", "goal"]).max("score").collect()
+    result = {}
+    for row in maximums:
+        # Row[0] = start, Row[1] = goal, Row[2] = score
+        if row[0] not in result:
+            result[row[0]] = {}
+        result[row[0]][row[1]] = row[2]
+    return result
+
+# We want to compute the relation score between leonardo->Christian,Ben and emma stone->Christian,Ben
+starts = [leonardo, "nm1297015"]
+goals = [christian, ben]
+
+s = time.time()
+res = bfs_multigrouped(starts, goals, graph, 2)
+s2 = time.time()
+print(s2 - s)
+# Execution time 19.52 seconds
+# time/relation 4.88 seconds
+
+s = time.time()
+res = bfs_grouped(starts[0], goals, graph, 2)
+res = bfs_grouped(starts[1], goals, graph, 2)
+s2 = time.time()
+print(s2 - s)
+# Execution time 50.49 seconds
+# time/relation 12.62 seconds
+
+# A more realistic example where both lists have 8 elements
+starts = [leonardo, "nm0580351", "nm0424060", "nm0000093", "nm0262635", "nm0185819", "nm1126657", "nm2835616"]
+goals = [christian, ben, "nm1297015", "nm0331516", "nm0799777", "nm0001497", "nm0000379", "nm0290556"]
+
+s = time.time()
+res = bfs_multigrouped(starts, goals, graph, 2)
+s2 = time.time()
+print(s2 - s)
+# Execution time 24.24 seconds
+# time/relation 0.38 seconds
+
+s = time.time()
+res = [bfs_grouped(start, goals, graph, 2) for start in starts]
+s2 = time.time()
+print(s2 - s)
+# Execution time 133.20 seconds
+# time/relation 2.08 seconds
+
+
+# Interestion observation:
+# Dijkstra's algorithm runtime = 7.3 minutes
+# Continuing the example from above with 1200 relations,
+# if we instead use the bfs_multigrouped with an estimated 0.38 seconds 
+# for each relation: 1200*0.38/60 = 7.6 minutes.
+# Using spark we are almost able to do 1200 computations in the same
+# time we could do one previously!
