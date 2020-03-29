@@ -9,3 +9,4 @@
 *.log
 *.fls
 *main.synctext.gz
+.vscode

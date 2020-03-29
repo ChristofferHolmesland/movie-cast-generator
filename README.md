@@ -62,3 +62,12 @@ General idea:
 
 ## Task 3.
 Task 2 in MRJob/Spark/Hadoop
+
+## Task 4.
+Change file paths to be relative to the executing script, not the working directory of the executor.
+
+## Task 5.
+Make a script that executes the other python scripts (so the user can run a search with on command).
+
+## Task 6.
+Implement the bfs_multigrouped function in spark
