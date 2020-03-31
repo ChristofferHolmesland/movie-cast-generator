@@ -71,3 +71,32 @@ Make a script that executes the other python scripts (so the user can run a sear
 
 ## Task 6.
 Implement the bfs_multigrouped function in spark
+
+## Task 7.
+Write report
+- Data
+    - Sources
+    - Attributes
+    - Date of download because later data may be missing
+- Describe algorithm
+    - Genre score, all genres, weighted average
+    - Similarity score
+        - tf-idf
+        - cosine
+        - tensorflow model
+        - problem with tensorflow model on spark
+        - max of scores
+    - relation score
+        - graph
+        - cost function (11 - distance) + (10 - avg(scores))
+        - dijkstra algorithm
+        - iterate through improvements until bfs_multigrouped
+        - justify why a n=2 bfs search is good enough compared to dijkstra
+- Describe how algorithm results can be evaluated
+    - How do we decide if the result is good?
+    - What is a good result?
+    - Assumptions
+        - Any movie with a high user rating on IMDB has a good cast
+    - Goal
+        - If you do a search with the attributes from IMDB the original cast should be early in the result
+    
