@@ -1,5 +1,9 @@
-Preprocess title_ratings
- python3 mrjob/title_ratings.py --hadoop-streaming-jar /home/ubuntu/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar -r hadoop hdfs:///user/ubuntu/project/data/title.ratings.tsv --output-dir hdfs:///user/ubuntu/project/output/title_ratings --no-output
+python3 mrjob/name_basics.py --hadoop-streaming-jar /home/ubuntu/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar -r hadoop hdfs:///user/ubuntu/project/data/name.basics.tsv --output-dir hdfs:///user/ubuntu/project/output/name --no-output
+python3 mrjob/title_basics.py --hadoop-streaming-jar /home/ubuntu/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar -r hadoop hdfs:///user/ubuntu/project/data/title.basics.tsv --output-dir hdfs:///user/ubuntu/project/output/title_basics --no-output
+python3 mrjob/title_principals.py --hadoop-streaming-jar /home/ubuntu/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar -r hadoop hdfs:///user/ubuntu/project/output/title_basics/part* hdfs:///user/ubuntu/project/data/title.principals.tsv --output-dir hdfs:///user/ubuntu/project/output/title_principals --no-output
+python3 mrjob/title_ratings.py --hadoop-streaming-jar /home/ubuntu/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar -r hadoop hdfs:///user/ubuntu/project/data/title.ratings.tsv --output-dir hdfs:///user/ubuntu/project/output/title_ratings --no-output
 
-Calculate genre scores
-    python3 mrjob/genre_score.py --hadoop-streaming-jar /home/ubuntu/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar -r hadoop hdfs:///user/ubuntu/project/output/title_basics/part* hdfs:///user/ubuntu/project/output/title_principals/part* hdfs:///user/ubuntu/project/output/title_ratings/part* --output-dir hdfs:///user/ubuntu/project/output/genre_scores --no-output
+python3 mrjob/genre_score.py --hadoop-streaming-jar /home/ubuntu/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar -r hadoop hdfs:///user/ubuntu/project/output/title_basics/part* hdfs:///user/ubuntu/project/output/title_principals/part* hdfs:///user/ubuntu/project/output/title_ratings/part* --output-dir hdfs:///user/ubuntu/project/output/genre_scores --no-output
+
+spark-submit spark/combiner.py
+spark-submit spark/graph.py

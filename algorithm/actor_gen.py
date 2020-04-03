@@ -8,7 +8,7 @@ import numpy as np
 import ast
 import sys
 
-file_path=('../input3.txt')
+file_path=('../input2.txt')
 
 with open(file_path,'rt') as f:
     for i,line in enumerate(f):

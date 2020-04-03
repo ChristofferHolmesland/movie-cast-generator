@@ -32,7 +32,7 @@ all_files = glob.glob(path + "/*_actor.tsv")
 li = [pd.read_csv(filename, sep="\t", header=0) for filename in all_files]
 
 # Collecting only the Actor_IDs
-IDs = [list(df["Actor ID"]) for df in li]]
+IDs = [list(df["Actor ID"]) for df in li]
 
 # Shortest path between a and b on new_graph
 def relation_score(a,b,new_graph):
@@ -56,7 +56,7 @@ def relation_score(a,b,new_graph):
         current = queue.pop()
         # When you take a node from the queue it means that you have found the shortest path to that node.
         finished[current["node"]] = current
-        print("Looking at " + current["node"] + ", distance: " + str(current["distance"]) + ", cost: " + str(current["cost"]))
+        #print("Looking at " + current["node"] + ", distance: " + str(current["distance"]) + ", cost: " + str(current["cost"]))
         if current["node"] == b:
             break
         # The distance to the next nodes is 1 more than the distance to this node
@@ -100,7 +100,6 @@ def relation_score(a,b,new_graph):
 
     return score
 
-
 #All of the IDs from {}_actor.tsv with each other 
 Id_list = list(itertools.product(*IDs))
 
@@ -111,7 +110,10 @@ data = pd.DataFrame(Id_list)
 combs = []
 for i in range(0, len(IDs)):
     for j in range(i+1, len(IDs)):
+        if i > 0:
+            print("ok")
         combs.extend([(x, y, relation_score(x, y, new_graph)) for x in IDs[i] for y in IDs[j]])
+
 
 #Making it to a dataframe
 d1 = pd.DataFrame(combs, columns=["ID1", "ID2", "Score"])
@@ -153,7 +155,7 @@ df['gs_score'] = col.mean(axis=1)
 
 #Finding average of the r_score and gs_score and making the final list
 df['final'] = df[["r_score","gs_score"]].mean(axis=1)
-col_list = list(range(len(li))
+col_list = list(range(len(li)))
 col_list.append('final')
 final_df = df[col_list]
 final_df = final_df.sort_values(by='final', ascending=False)
