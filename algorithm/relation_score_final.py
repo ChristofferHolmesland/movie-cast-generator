@@ -1,5 +1,5 @@
 # Evaluates the relationship between {}_actors.tsv
-# Requires all {}_actor.tsv files, principals.tsv, input.txt
+# Requires all {}_actor.tsv files, principals.tsv
 # Outputs into final.tsv
 import pandas as pd 
 import numpy as np 
@@ -28,7 +28,7 @@ new_graph.set_index(keys=["key", "to_node"], drop= True, inplace=True)
 
 # Reading all {}_actor.tsv intoa list of dataframes
 path = r'../data'
-all_files = glob.glob(path + "/*_actor.tsv")
+all_files = glob.glob(path + "/*_actor3.tsv")
 li = [pd.read_csv(filename, sep="\t", header=0) for filename in all_files]
 
 # Collecting only the Actor_IDs
@@ -160,3 +160,4 @@ final_df = final_df.sort_values(by='final', ascending=False)
 
 #Outputting the final list as a tsv
 final_df.to_csv('../data/final3_top25_latest.tsv', sep= '\t', header=True)
+
