@@ -84,13 +84,16 @@ Write report
     - Sources
     - Attributes
     - Date of download because later data may be missing
-- Describe how algorithm results can be evaluated
+- [x] Describe how algorithm results can be evaluated
     - How do we decide if the result is good?
     - What is a good result?
     - Assumptions
         - Any movie with a high user rating on IMDB has a good cast
     - Goal
         - If you do a search with the attributes from IMDB the original cast should be early in the result
-- Graph of runtime of different inputs
+- Experimental evaluation
+    - Result of search query
+    - Graph of runtime of different inputs
 - Conclusion
 - Reference list
+    - Figure out why the reference numbers are not showing
