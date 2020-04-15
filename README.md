@@ -80,7 +80,7 @@ Write report
     - User rating
     - Movie casts
     - Box office
-- Data
+- [x] Data
     - Sources
     - Attributes
     - Date of download because later data may be missing
