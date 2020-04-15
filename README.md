@@ -91,9 +91,10 @@ Write report
         - Any movie with a high user rating on IMDB has a good cast
     - Goal
         - If you do a search with the attributes from IMDB the original cast should be early in the result
-- Experimental evaluation
+- [x] Experimental evaluation
     - Result of search query
     - Graph of runtime of different inputs
-- Conclusion
-- Reference list
+- [x] Conclusion
+- [ ] Fix image position
+- [x] Reference list
     - Figure out why the reference numbers are not showing
