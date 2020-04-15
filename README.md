@@ -74,7 +74,7 @@ Implement the bfs_multigrouped function in spark
 
 ## Task 7.
 Write report
-- Background
+- [x] Background
     - Short self-contained summary of neccessary background information.
     - What is IMDB
     - User rating
