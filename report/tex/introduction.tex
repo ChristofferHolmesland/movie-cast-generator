@@ -1,23 +1,12 @@
+%!TEX root = main.tex
 
 \noindent
 
 \paragraph{Context and Motivation}
-For a low budget movie it is important to have a well-known actor. It can increase the box office sales or help attract investors\cite{StephenFollows}.
-If you are new to the film industry it can be hard to know which actors or actresses will be a good fit for your movie.
-It is possible to use previous movies where you liked the performance of the actor as inspiration, but there are too many movies
-being made that it is not possible to get a proper overview of all the possibilities. Another possibility is to look at websites like
-IMDb\cite{IMDb} to find inspiration. You can use features like the user score of a movie to select actors. We do not consider this
-as a good option because there are too many movies to compare, and in practice you will end up looking at only the top rated movies.
+Films or movies are not just an important art form but also a booming industry in various regions, all over the world. The economic impact of the film industry has been exponentially growing over time. The global film industry was worth an estimated \$136 billion in 2018. Of all the various factors contributing to the success of a movie, the popularity/traction of the cast tops the list. The industry has seen many movies with amazing plot, but poor cast perform bad at the box office, while those with a popular cast outperform at the box office. This poses a serious threat to any film maker/ director. Choosing the dream cast for their plot has now become increasingly difficult. For a low budget movie, it is important to have a well-known actor. It can increase the box office sales or help attract investors\cite{StephenFollows}. If you are new to the film industry, it can be hard to know which actors or actresses will be a good fit for your movie. It is possible to use previous movies where you liked the performance of the actor as inspiration, but there are too many movies being made that it is not possible to get a proper overview of all the possibilities. Another possibility is to look at websites like IMDb\cite{IMDb} to find inspiration. You can use features like the user score of a movie to select actors. We do not consider this as a good option because there are too many movies to compare, and in practice you will end up looking at only the top-rated movies. Hence, we developed a search engine which will address the above issues efficiently.
 
 \paragraph{Research Problem}
-In this report we present a solution to the problem of selecting a movie cast. Our system lets the user input a brief summary of their
-movie and a list of actor characteristics they want the lead actors to have. The system uses data from IMDb to rank possible actors
-and returns a list of suggestions to the user. The rank is based on a combination of past performance, acting relationships and
-a subset of the actor characteristics. 
+In this report we present a solution to the problem of selecting a movie cast. Our system lets the user input a brief summary of their movie and a list of actor characteristics they want their lead actors to possess (like age, gender). The system uses data from IMDb to rank possible actors and returns a list of ranked actor(s) suggestions to the user. The rank is based on score which is a combination of past performance on related genre, actor to actor relationships, plot similarity and a subset of the actor characteristics.
 
 \paragraph{Contribution Summary}
-\begin{itemize}
-\item We created an efficient method of calculating actor relationships on a large scale.
-\item We implemented a search engine returning single actors.
-\item We implemented a search engine returning groups of actors.
-\end{itemize}
+There have been attempts to generate machine-learning based systems to predict movie success and box office collections. Use of recommendation systems for inspiration to choose actors to cast is also a possible option. But we have directly addressed the issue of generating a movie cast, given the particular user inputs by calculating a genre score for the subset of actors based on the input characteristics and plot summary. We believe this to be an efficient search engine since it can take any number of actors’ descriptions as input and return a ranked list of the same number of actors or group of actors. We also developed an actor-to-actor graph and an efficient way to traverse through it to obtain relevant data. We have shown how using Spark/MRjob has significantly improved the overall efficiency of this project. 
