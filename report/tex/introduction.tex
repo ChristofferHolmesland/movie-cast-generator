@@ -10,3 +10,9 @@ In this report we present a solution to the problem of selecting a movie cast. O
 
 \paragraph{Contribution Summary}
 There have been attempts to generate machine-learning based systems to predict movie success and box office collections. Use of recommendation systems for inspiration to choose actors to cast is also a possible option. But we have directly addressed the issue of generating a movie cast, given the particular user inputs by calculating a genre score for the subset of actors based on the input characteristics and plot summary. We believe this to be an efficient search engine since it can take any number of actors’ descriptions as input and return a ranked list of the same number of actors or group of actors. We also developed an actor-to-actor graph and an efficient way to traverse through it to obtain relevant data. We have shown how using Spark/MRjob has significantly improved the overall efficiency of this project. 
+
+\begin{itemize}
+    \item We created an efficient method of calculating actor relationships on a large scale.
+    \item We implemented a search engine returning single actors.
+    \item We implemented a search engine returning groups of actors.
+\end{itemize}
