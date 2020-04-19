@@ -7,6 +7,7 @@ Acquiring the required data for this project in itself was quite challenging. A 
 One notable challenge was that the data from IMDb is updated every day with new information. This means that you might not get the same result from the search engine as we did when you perform a search. We downloaded the data several times but at one point we noticed that the data can be corrupted, i.e. a lot of information was missing. There seems to be some "luck" involved in the download process. Some days none of the actors have birth years which means that the search engine will not work, other days the ratings were missing. To get the results in this report we used the version of data from the 6th of March 2020. The data from OMDb was only downloaded once on the 12th of March 2020.
 
 
+
 \subsection{Preprocessing}
 
 The data from IMDb includes a lot of information we don’t need and it also has missing values. It is also split over several files, e.g. \textit{title.basics.tsv} and \textit{title.ratings.tsv}. Every person in the dataset has a unique id, name, birthyear, deathyear, a list of primary professions and a list of titles they are known for working on. We replace the primary profession list with a number indicating the gender. We remove people who are dead or who has never been an actor or actress before. There are also some people who are actors but not known for any titles. They are also removed because we need that information to calculate a score. These steps reduce the number of people from 9.9 million to 200 thousand.
@@ -16,25 +17,33 @@ The data in the \textit{title.basics.tsv} file is an id, type, well known title,
 The movie ratings are in the \textit{title.ratings.tsv} file from IMDB. The format is id, average rating and number of votes. Any title removed from \textit{title.basics.tsv} is also removed from this data. The \textit{title.principals.tsv} file contains a list of the most important people for each title. The fields are title id, ordering, actor id, category, job, characters. We use this information to determine what actors have worked together. We only look at the titles with id which was not removed in the previous step, and the ordering, category, job and characters fields are dropped because they provide no relevant information to us.
 
 
+
 \subsection{Ranking algorithm}
 
 The ranking algorithm is used to give a score to the actor groups. The score is given as a number between 0 and 10, where a higher score indicates a higher rank. The final score is a combination of three scores. We call the first one the genre score. It is calculated based on the actors previous performance in that particular genre. The second score is the similarity score. It is calculated from the plot summary of the movies a person has acted in. The third and final score is the relation score between the actor and the other actors in the group. The final score is the average of these scores.
 
 
+
 \subsubsection{Genre score}
 
-To calculate the genre score we need to convert the movie data to a different format. The raw data we use are the ratings, principals and title files. They are read by a MRJob script which calculates the weighted average for each genre for each actor. The weights are the number of votes for that title. If an actor has acted in two movies, one with the genres "Adventure" and "Drama", the other with the genres "Adventure" and "Action" then the actor will have genre scores for the genres "Adventure", "Drama" and "Action". The "Drama" and "Action" scores will be the rating that those movies have on IMDb. The "Adventure" score will be a weighted average of both ratings. Assuming that the first movie had 10 votes and a rating of 9, and that the second movie had 90 votes and a rating of 3 then the "Adventure" score is $\frac{10}{10+90}\cdot9+\frac{90}{10+90}\cdot3=3.6$.
+To calculate the genre score we need to convert the movie data to a different format. The raw data we use are the ratings, principals and title files. They are read by a MRJob script which calculates the weighted average for each genre for each actor. The weights are the number of votes for that title. If an actor has acted in two movies, one with the genres "Adventure" and "Drama", the other with the genres "Adventure" and "Action" then the actor will have genre scores for the genres "Adventure", "Drama" and "Action". The "Drama" and "Action" scores will be the rating that those movies have on IMDb. The "Adventure" score will be a weighted average of both ratings. Assuming that the first movie had 10 votes and a rating of 9, and that the second movie had 90 votes and a rating of 3 then the "Adventure" score is $$\frac{10}{10+90}\cdot9+\frac{90}{10+90}\cdot3=3.6$$
 
 Our initial version of the genre score did not consider the number of votes. We quickly realised that a lot of movies have very few votes, and that those movies often have a high rating. It would be hard to set a threshold of minimum number of votes because it could exclude new actors who might not have a lot of experience.
 
 The MRJob consists of one mapper and two reducers. The mapper reads each line and yields the data such that when reducing all of the information for a movie is available on the same line. An example of what is returned if the input line belongs to ratings.tsv is showed in code listing \ref{GenreScoreCode1}. In the first reducer the format is changed from being all of the information about a movie to yielding the information relative to the actor. If for example there are three actors in a movie, then there will be three yield calls with the genres and the rating of the movie. This is shown in code listing \ref{GenreScoreCode2}. The final reducer operates on the actor information and calculates the weighted average of the scores.
-\begin{lstlisting}[language=Python, caption=Genre score mapper, label=GenreScoreCode1, breaklines=true]
+
+
+
+\begin{lstlisting}[float=h, language=Python, caption=Genre score mapper, label=GenreScoreCode1, numbers=left]
 def mapper_collect_title(self, _, line):
     values = line.split("\t")
     if len(values) == 3:
         yield values[0], ["rating", (values[1], values[2])]
 \end{lstlisting}
-\begin{lstlisting}[language=Python, caption=Genre score first reducer, label=GenreScoreCode2, breaklines=true]
+
+
+
+\begin{lstlisting}[float=h, language=Python, caption=Genre score first reducer, label=GenreScoreCode2, numbers=left]
 def reducer_title(self, key, values):
     # Generation of the genres object omitted.
     genre_ratings = {genre: rating for genre in genres}
@@ -42,6 +51,8 @@ def reducer_title(self, key, values):
         if value[0] == "actor":
             yield value[1], genre_ratings
 \end{lstlisting}
+
+
 
 \subsubsection{Similarity score}
 The similarity score is calculated by comparing the summary plot given as input by the user and the summary of the movies acted by the actors with high genre scores. For this purpose, we tried the following methods:
@@ -54,7 +65,9 @@ The similarity score is calculated by comparing the summary plot given as input 
 
 There is a large drawback to using a tensorflow model when the program runs on Spark. The model is quite large, almost one gigabyte. Usually a spark broadcast variable would be used to share an object between nodes but in this case it couldn’t be done because the model cannot be pickled which is a requirement for broadcast variables. To be able to use it on the slaves each of them would have to load it into memory instead. To achieve this we defined closures for each partition of the data where the tensorflow library was imported and the model was loaded. Importing the tensorflow library is quite expensive. It usually halts for 30 seconds before the import is done. Loading the model is equally expensive, thus the total time on each partition is a minute before work can start. Because there is multiple partitions per node, the model is loaded several times on each of them. In our case this took so much time that the algorithm hadn’t finished after several hours. We didn’t consider this acceptable and looked for a different alterantive. The best solution we found was to do the calculations on the master node instead. Because it has more memory available, we were able to load the model once and calculate the similarity score for each title using the rdd.toLocalIterator() generator of the DataFrame, shown in code listing \ref{CodeToLocalIterator}. This means that all of the data had to be transferred over the network to the master node, and then back again to the slave nodes when the calculations were done, but this was actually faster in our cluster than the former method. The runtime of similarity score is typically about 8 minutes. The initial version was a bit slower, but when we decided to pre-allocate the lists where the similarity score is stored before being turned into a DataFrame the performance improved. We do however recognize that transferring the data over the network might be a bad option in general and think that if we had more time to work on this we would have looked for a better solution.
 
-\begin{lstlisting}[language=Python, caption=Plot similarity, label=CodeToLocalIterator, breaklines=true]
+
+
+\begin{lstlisting}[float=h, language=Python, caption=Plot similarity, label=CodeToLocalIterator, numbers=left]
 scores = [None] * movies.count()
 sim_arr = [search_plot, None]
 
@@ -65,13 +78,17 @@ for i, row in enumerate(movies.rdd.toLocalIterator()):
     scores[i] = (row.tconst, 10 * float(np.dot(sim[0], sim[1])))
 \end{lstlisting}
 
+
+
 \subsubsection{Relation score}
 
 The two previous scores are independent of each actor. We believe this is a good way of measuring the performance of each actor. However, when combining the actors to groups, we wanted to have some measure of how good two actors work together such that the groups were not just the top ranked candidates based on the independent scores but also how well their on-screen combination worked. Our initial idea was to consider the first candidate list as the primary actor, and only include actors from the other candidate lists if they had acted with someone in the primary candidate list previously. This turned out to be a really bad way because there were not that many direct relationships in the data. When looking for alternatives, we found the Spark GraphX framework and got inspired to make a relationship graph instead to achieve the same goal. GraphX cannot be used in PySpark so we had to implement the graph ourselves. The main idea is that if two people have acted together then they have a relationship of strength equal to the IMDB rating of the title they worked on.
 
 The initial version of this was implemented in Python using Pandas dataframes, because we found that the overhead of working on Spark made it harder to explore ideas quickly. The graph was stored in a dataframe where index is the multi-index from\_node, to\_node. The only column is what we call the inverse of the rating. The inverse of the rating is simply ten minus the rating. This is done because it enables us to use an algorithm to find the shortest path between two nodes on the graph. If you are unfamiliar with graph algorithms, we would like you to note that the shortest path doesn’t actually mean as few nodes as possible. The proper description is the path which minimises the cost function between two nodes. The shortest path would be along the lowest numbers, which in turn means along the highest ratings. A graph with the rating itself as the edge cost would require an algorithm which maximises the cost. The maximum cost would be to never arrive at the goal node because the cost could always be increased by simply visiting a different node before visiting the goal node. We decided to implement Dijkstra’s algorithm to find the path between two nodes. It finds the path by looking at the edges from the starting node, picking the one with the lowest cost and then looking at that node’s edges. This continues until the goal node is found, see code listing \ref{CodeDijkstra}. Because we always look at the node with the lowest cost, we can be sure that the path to the goal node actually is the shortest path. The original version of the algorithm works on two nodes at a time, but there exist variants that can find the path between one node and every other node.
 
-\begin{lstlisting}[language=Python, caption=Dijkstra pseudocode, label=CodeDijkstra, breaklines=true]
+
+
+\begin{lstlisting}[float=h, language=Python, caption=Dijkstra pseudocode, label=CodeDijkstra, numbers=left]
 queue = [start_node]
 while len(queue) > 0:
     current = queue.get_lowest_cost_node()
@@ -85,9 +102,13 @@ while len(queue) > 0:
             queue.add(edge)
 \end{lstlisting}
 
+
+
 Dijkstra's algorithm works great when all of the data is in memory like it is when it is stored in a Pandas dataframe. It is quite slow to execute because of the size of our data. The graph consists of almost one million nodes, and between 10 and 350 edges from each node. The execution depends on the nodes we are finding the path between but in general the time is about 20 minutes. When we moved over to the Spark version of the algorithm, we kept this in mind. Let us first make some assumptions. If we take the top 30 candidates from each candidate list, and there are three candidate lists, then we need to calculate 3· $(30*30)=2700$ relationship scores. If each of them needs 20 minutes to finish, then the execution time would not be acceptable. Even if each score was calculated in just one second the total time would be 45 minutes. When we implemented Dijkstra's algorithm on Spark, the runtime was even worse because each step requires that some data is transferred from a slave to the master and then back again. Because of the way Dijkstra's algorithm works, state has to be shared between each worker, and thus data has to travel over the network. To avoid this, we decided to implement our own algorithm instead which doesn’t have that requirement. We tried to find previous work on graph algorithms on Spark, but all of them were using Spark GraphX which we couldn’t do.
 
 Our solution was to create a greedy fixed step algorithm inspired by the breadth first algorithm. The breadth first algorithm simply looks at all of the edges for a node before continuing. The reason for making it a greedy fixed step algorithm is the challenge which is the size of our graph. As an example, you can start at Leonardo DiCaprio and look at the number of edges. In our graph he is connected to 350 other actors. It would be really quick to calculate the shortest path if the goal actor were directly connected to Leonardo. For most relationships there is not a direct connection, and so we have to also look at the edges of each edge. This increases the number of paths to 58,339 which isn’t that many considering the size of the graph. If the goal is still not found the number of paths is increased again by looking at the edges of the edges to 8,901,575. If we again assume 2700 relationships, then the number of paths to check is over 24 billion. This is doable but it does increase the execution time a lot. If the relationship isn’t found in those 8.9 million paths, then another step outward can be taken to increase the number of paths to 1.3 billion. This would be a total of 3.5 trillion different paths which is so large that the execution time would not be acceptable. We therefore decided that the fixed step should be either 2 or 3. This also makes sense at a conceptual level. If you consider the relationship between two actors A and B. If A worked with C and C worked with B, then it makes sense to say that their working relationship is important. The same can be said about the relationship A-C-D-B which is a 3-step relationship. If the relationship is more distant, it makes sense to value it lower than a close relationship. This caused us to change the cost function between two nodes. Instead of being just the inverse of the rating, it was changed to be the average of the inverse distance and the inverse rating. The combination of the 2 or 3 step algorithm and the new cost function means that only the close relationships will affect the group score. A close and good relationship increases the score, while a close and bad relationship decreases the score. Any distant, meaning greater than 2 or 3 steps, will not change the score.
+
+
 
 \begin{figure}[t]
     \centering
@@ -96,11 +117,16 @@ Our solution was to create a greedy fixed step algorithm inspired by the breadth
     \small
     For the Use case example (Interstellar): Matthew McConaughey: nm0000190, Anne Hathaway: nm0004266, Jessica Chastain: nm1567113 are the main actors. The edges represent the average of the inverse distance and the inverse rating.
     \caption{A sample snapshot of the actor-actor relationship graph}
+    \label{fig: relation graph}
 \end{figure}
+
+
 
 Since we have not been able to find a description of a multi start and end node breadth first algorithm we would like to include a description of it. The first iteration of our algorithm is the normal breadth first algorithm. The graph is stored in a DataFrame, and the current paths are stored in another DataFrame. Start by taking the starting node and adding it and every edge from it to the DataFrame. Continue adding edges to the DataFrame n times, where n is the number of steps you are using. The resulting DataFrame should have several columns where the first one is the starting node, the following columns should be the edge and cost to that edge. By applying a function to each row of the DataFrame we can calculate the cost from the starting node to the last edge node following the path along every edge in that row. If the goal node is found along the path, then we return the cost, otherwise a token value is returned. The token value should be outside of the cost function domain or be on an extreme of the domain meaning that in any situation it will not be considered as a possible path to the goal node. In our case, we use a token value of -1 because the domain of our cost function is [0, 10]. The inverse of the cost function is returned and stored in a score column. Finally, the score column is aggregated to find the maximum and this is returned as the relation score between the two actor nodes. By observing that calculating the path from A-B-C is done by a 2-step search from A, is done no matter what our goal node is. The algorithm can be improved by allowing a list of goal nodes. When applying the cost function simply check if any of the goal nodes are found along the path. This is a simple change that improves the exeuction time a lot. If you look at the score between one actor and 8 other actors, the exeuction time is about 20 seconds for each relation if you are using the breadth first algorithm. With the multi goal optimisation, the time is reduced to about 2.5 seconds for each relation. When calculating the relation scores between the candidate lists A and B of size 30 each, the number of function calls is now reduced from 90 to just 30. A simplified version of this function is shown in code listing \ref{CodeBFS}.
 
-\begin{lstlisting}[language=Python, caption=Simplified multi-start to multi-goal search algorithm, label=CodeBFS, breaklines=true]
+
+
+\begin{lstlisting}[float=h, language=Python, caption=Simplified multi-start to multi-goal search algorithm, label=CodeBFS, numbers=left]
 # Get initial nodes and their edges
 current = graph.filter(F.col("node").isin(start_nodes))
 current = current.join(graph, current.node == graph.node)
@@ -115,33 +141,40 @@ best_scores = current.groupby(["start", "goal"]).max("score").collect()
 return best_scores
 \end{lstlisting}
 
+
+
 By observing that the same calculations are done when finding the path from A1 to B and A2 to B we can improve it further to a multi start node algorithm. The most expensive part of the algorithm is transferring the graph edges to the current path. The number of times we do this grows with the number of times we call the merge function on two dataframes. By looking at the path from multiple start nodes to multiple goal nodes the number of merges is reduced and the number of function calls can be reduced to 1. 
 
 Following the assumptions from before, the total time for a 2-step search is 129 seconds. This gives a time per relation of 0.048 seconds which means that compared to the original algorithm, the execution time has been improved by a factor of 9500. The number of paths for the 3-step search is quite a bit larger but the improvement is still significant. The total execution time is 4402 seconds, giving a time per relation of 1.63 seconds which is a 280 times improvement. 
 
+
+
 \subsubsection{Overall score}
 
-The ranking algorithm is used to determine whether one actor could perform better than another. This is done by calculating a score for the actors, before combining them to get a score for the whole group. Our algorithm assumes the first actor description to be the primary actor and tries to maximise the cast rank based on this. The following is a description of our algorithm. The first step is to find every actor that matches the primary actor description. For every matching actor, a score is calculated. It is a combination of the genre score, past acting relationship (maybe) and how similar the plots of the movies the actor has acted in are to the user plot. The genre score is taken as the average of the actor genre scores, given that they match the user genres. This is done because one actor might have a high score in war and action movies, but low in romance and drama. If the user is making a romance and drama movie, then the genre score is taken as the average of just those two scores. The plot of every movie the actor has been in is compared to the user plot. The maximum similarity score is used for the actor score. To make the average of the genre score and the similarity equally important for the actor score the similarity bound is changed to (0, 10).Then the actor score is changed to be in the interval (0, 1). Thus the expression for the score is: $actor(id)=\frac{1}{20}(avg(genrescore)+5.(max(similarity)+1))$.To find the other actors the procedure above is repeated on the actors matching the other descriptions. Because we consider it beneficial to cast actors who have worked together before, we use the relation score calculation above stated to calculate the actor relation score. To calculate the cast score, we also make a prediction of the IMDB rating that the resulting movie will have if the selected actors are in it. The prediction is calculated from the average of the actors’ average genre scores. The expression for the cast score is: $cast(ids)=\frac{1}{\#ids}\sum_{i=1}^{\#ids}worked(ids_i, ids_1)\cdot actor(ids_i) + rating(ids)$. The $worked$ function returns X if they have worked together before, 0 otherwise. 
+The ranking algorithm is used to determine whether one actor could perform better than another. This is done by calculating a score for the actors, before combining them to get a score for the whole group. Our algorithm assumes the first actor description to be the primary actor and tries to maximise the cast rank based on this. The following is a description of our algorithm. The first step is to find every actor that matches the primary actor description. For every matching actor, a score is calculated. It is a combination of the genre score, past acting relationship (maybe) and how similar the plots of the movies the actor has acted in are to the user plot. The genre score is taken as the average of the actor genre scores, given that they match the user genres. This is done because one actor might have a high score in war and action movies, but low in romance and drama. If the user is making a romance and drama movie, then the genre score is taken as the average of just those two scores. The plot of every movie the actor has been in is compared to the user plot. The maximum similarity score is used for the actor score. To make the average of the genre score and the similarity equally important for the actor score the similarity bound is changed to (0, 10).Then the actor score is changed to be in the interval (0, 1). Thus the expression for the score is: $actor(id)=\frac{1}{20}(avg(genrescore)+5.(max(similarity)+1))$.To find the other actors the procedure above is repeated on the actors matching the other descriptions. Because we consider it beneficial to cast actors who have worked together before, we use the relation score calculation above stated to calculate the actor relation score. To calculate the cast score, we also make a prediction of the IMDB rating that the resulting movie will have if the selected actors are in it. The prediction is calculated from the average of the actors’ average genre scores. The expression for the cast score is: $$cast(ids)=\frac{1}{\#ids}\sum_{i=1}^{\#ids}worked(ids_i, ids_1)\cdot actor(ids_i) + rating(ids)$$. The $worked$ function returns X if they have worked together before, 0 otherwise. 
 
 The cast score is used to rank the groups. A higher score means a better group. The groups are sorted in descending order and returned to the user.
 
+
+
 \subsection{Workflow}
 
-The summary of the workflow for our project is pictorially represented in the two figures. The Python process is described in figure \ref{PythonWorkflow}, and the Spark process is described in figure \ref{SparkWorkflow}. 
+The summary of the workflow for our project is pictorially represented in the two figures. The Python process is described in \ref{fig:python-process}, and the Spark process is described in figure \ref{fig:spark-process}.
 
-\begin{figure*}[h]
-    \centering
-    \includegraphics[width=\textwidth]{workflow.png}
-    \caption{Python Process Workflow}
-    \label{PythonWorkflow}
-\end{figure*}
+\begin{figure}[t]
+	\includegraphics[width=8.25cm,keepaspectratio]{python_workflow.png}
+	\caption{Python process workflow}
+	\label{fig:python-process}
+\end{figure}
 
-\begin{figure*}[h]
-    \centering
-    \includegraphics[width=\textwidth]{SparkProcess.jpg}
-    \caption{Spark Process Workflow}
-    \label{SparkWorkflow}
-\end{figure*}
+
+\begin{figure}[t]
+	\includegraphics[width=8.25cm,keepaspectratio]{spark_workflow.png}
+	\caption{Spark process workflow}
+	\label{fig:spark-process}
+\end{figure}
+
+
 
 \subsection{Algorithm results}
 

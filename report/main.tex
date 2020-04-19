@@ -7,7 +7,29 @@
 % it was edited by Leander Jehl and Hein Meling
 \documentclass[sigconf]{acmart}
 
+\usepackage{setspace}
+
 \usepackage{ragged2e}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+
+\lstdefinestyle{mystyle}{
+	columns=flexible,
+	breaklines=true,
+	breakatwhitespace=true,
+	showstringspaces=false,               
+	captionpos=b,                    
+	numbers=left,                    
+	numbersep=5pt,                  
+	basicstyle=\normalsize\sffamily,
+	frame=tb,
+	float=H
+}
+
+\lstset{style=mystyle}
+
 
 \input{dat620-setup}
 
@@ -15,79 +37,90 @@
 \input{preamble}
 
 \begin{document}\sloppy
-%TODO: Replace the title with your project title.
-\title{Search engine for generating a movie cast}
-%you may use a subtitle
-%\subtitle{My project subtitle}
+	
+		
+	%TODO: Replace the title with your project title.
+	\title{Search engine for generating a movie cast}
+	%you may use a subtitle
+	%\subtitle{My project subtitle}
+	
+	%TODO replace author names with your name and email below:
+	\author{Christoffer Holmesland}
+	\affiliation{University of Stavanger, Norway}
+	\email{cr.holmesland@stud.uis.no}
+	
+	\author{Malavika Ramakrishnan}
+	\affiliation{University of Stavanger, Norway}
+	\email{m.ramakrishnan@stud.uis.no}
+	
+	%TODO: add the name of one or more supervisors
+	%\supervisors{Leander Jehl and Hein Meling}
+	
+	\begin{abstract}
+	%The abstract lies in a different file: 
+	\input{tex/abstract}
+	\end{abstract}
+	
+	%TODO: Replace with some keywords, relevant for your project
+	\keywords{Hadoop, Spark, Film, Casting, Search engine}
+	
+	\maketitle
+	
+	%Each section can be placed in a separate file and included by the input command.
+	
+	
+	
+	\section{Introduction}
+	\label{sec:introduction}
+	\input{tex/introduction}
+	
+	
+	
+	\section{Related work}
+	\label{sec:relatedwork}
+	\input{tex/relatedwork}
+	
+	
+	\section{Background}
+	\label{sec:background}
+	\input{tex/background}
+	
+	
+	\section{Hadoop cluster}
+	\label{sec:hadoop}
+	\input{tex/hadoop}
+	
+	
+	\section{Methodology}
+	\label{sec:method}
+	\input{tex/method}
+	
+	
+	\section{Experimental Evaluation}
+	\label{sec:evaluation}
+	\input{tex/evaluation}
+	
+	
+	\section{Conclusion}
+	\label {sec:conclusion}
+	\input{tex/conclusion.tex}
+	
+	
+	%\section{Citation}
+	%\label{sec:citation}
+	%\input{tex/citations}
+	
+	
+	%\section{Latex}
+	%\label{sec:latex} 
+	%\input{tex/latex}
+	
+	%\section{Further Reading}
+	%\label{sec:further}
+	%input{tex/further}
+	
+	\bibliographystyle{ACM-Reference-Format}
+	\bibliography{sample-bibliography}
 
-%TODO replace author names with your name and email below:
-\author{Christoffer Holmesland}
-\affiliation{University of Stavanger, Norway}
-\email{cr.holmesland@stud.uis.no}
-
-\author{Malavika Ramakrishnan}
-\affiliation{University of Stavanger, Norway}
-\email{m.ramakrishnan@stud.uis.no}
-
-%TODO: add the name of one or more supervisors
-%\supervisors{Leander Jehl and Hein Meling}
-
-
-
-\begin{abstract}
-%The abstract lies in a different file: 
-\input{tex/abstract}
-\end{abstract}
-
-%TODO: Replace with some keywords, relevant for your project
-\keywords{Hadoop, Spark, Film, Casting, Search engine}
-
-\maketitle
-
-%Each section can be placed in a separate file and included by the input command.
-
-\section{Introduction}
-\label{sec:introduction}
-\input{tex/introduction}
-
-\section{Related work}
-\label{sec:relatedwork}
-\input{tex/relatedwork}
-
-\section{Background}
-\label{sec:background}
-\input{tex/background}
-
-\section{Hadoop cluster}
-\label{sec:hadoop}
-\input{tex/hadoop}
-
-\section{Methodology}
-\label{sec:method}
-\input{tex/method}
-
-\section{Experimental Evaluation}
-\label{sec:evaluation}
-\input{tex/evaluation}
-
-\section{Conclusion}
-\label {sec:conclusion}
-\input{tex/conclusion.tex}
-
-%\section{Citation}
-%\label{sec:citation}
-%\input{tex/citations}
-
-
-%\section{Latex}
-%\label{sec:latex} 
-%\input{tex/latex}
-
-%\section{Further Reading}
-%\label{sec:further}
-%input{tex/further}
-
-\bibliographystyle{ACM-Reference-Format}
-\bibliography{sample-bibliography}
 
 \end{document}

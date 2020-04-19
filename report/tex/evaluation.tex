@@ -2,9 +2,13 @@
 
 In this section, we are going to look at the difference in runtime between the implementation in Python and the Spark implementation. We are also going to show the results of some search queries.
 
+
+
 \subsection{Experimental setup}
 
 The MRJob/Spark implementation code ran on the Hadoop cluster described in the Hadoop cluster section. The Python implementation ran on a machine running Windows 10 Pro with the following hardware: Intel i5-8600K 3.6GHz CPU, 16 GB DDR4 2667MHz memory, and a SSD disk with a read speed of 500MB/s and a write speed of 320MB/s. The Python version used is 3.7.4 64-bit. To measure the execution time of the pre-processing scripts we used the time(1)\cite{Time1} linux command. To be able to use linux commands on a Windows machine, we used the Git Bash terminal\cite{GitBash}. In the pre-processing steps each task is implemented in MRJob except the graph task which was implemented in Spark. The algorithm steps are implemented using Spark. The time unit is seconds unless otherwise specified. To measure the execution time, we used the time function from the time library in Python. We were not able to use the time(1)command because we wanted to measure several functions defined in the same script
+
+
 
 \subsection{Results}
 
@@ -19,7 +23,8 @@ The second reason for why the Python implementation is faster is because all of 
 The third reason is because the machine running the Python code is faster, it has more memory and a faster processor. Since the pre-processing is only supposed to happen once, we decided to not spend a lot of time optimizing the code so that we could focus on the algorithm instead.
 
 
-\begin{table}
+
+\begin{table}[H]
 \centering
     \begin{tabular}{ |c|c|c| } 
         \hline
@@ -34,16 +39,19 @@ The third reason is because the machine running the Python code is faster, it ha
         \textbf{Total} & \textbf{379.7} & \textbf{1360.8} \\ 
         \hline
     \end{tabular}
-    \caption{Pre-processing runtime of Python and Spark}
+    \caption{Pre-processing runtime of Python and Spark in seconds}
     \label{tab:preprocess runtime}
 \end{table}
+
 
 
 \subsubsection{Algorithm}
 
 The search query execution times were measured while using the attributes from the Interstellar movie. The total Python time is an estimate based on the relation score measurement. The relation score times are reported as a per relation score to better reflect the difference. The reason for why the difference is so great is because the Spark implementation is able to compute multiple relation scores at the same time, while the Python implementation can only compute one at a time. A more detailed explanation of the difference can be found in the Relation score section in part 5. In the execution time of the algorithm we can again see that when transferring data between nodes is required, the time increases a lot. This is why the Python implementation is faster in the candidate actors’ task and the similarity score task. As we discussed in the similarity score section, we were not able to figure out a good method of sharing the tensorflow model between the worker nodes on Spark which is why the time is significantly greater in this task. The relation score time was calculated while running a 2-step search. When the number of steps is increased to three the run time per relation is increased to 0.4 seconds.
 
-\begin{table}
+
+
+\begin{table}[H]
 	\centering
     \begin{tabular}{ |c|c|c| } 
         \hline
@@ -51,22 +59,27 @@ The search query execution times were measured while using the attributes from t
         \hline
         candidate actors & 60.3 & 331.5 \\ 
         similarity score & 89.6 & 448.8 \\ 
-        relation score & 438.0 & 0.0362 \\ 
+        relation score & 438.0 & 0.0362 \\ \hline
         \textbf{Total} & \textbf{13.7 days} & \textbf{1182.1} \\ 
         \hline
     \end{tabular}
-	\caption{Algorithm runtime of Python and Spark}
+	\caption{Algorithm runtime of Python and Spark in seconds}
 	\label{tab:algorithm runtime}
 \end{table}
 
+
+
 The search query execution times were measured while using the attributes from the Interstellar movie. The total Python time is an estimate based on the relation score measurement. The relation score times are reported as a per relation score to better reflect the difference. The reason for why the difference is so great is because the Spark implementation is able to compute multiple relation scores at the same time, while the Python implementation can only compute one. A more detailed explanation of the difference can be found in the Relation score section in part 5. In the execution time of the algorithm we can again see that when transferring data between nodes is required the time increases a lot. This is why the Python implementation is faster in the candidate actors task and the similarity score task. As we discussed in the similarity score section we were not able to figure out a good method of sharing the tensorflow model between the worker nodes on Spark which is why the time is significantly greater in this task. The relation score time was calculated while running a 2-step search. When the number of steps is increased to three the run time per relation is increased to 0.4 seconds.
+
+
 
 \subsubsection{Search result}
 
 The search engine is not limited to five groups for a search query. It will return groups using the top 25 actors from each candidate list, and also return the complete candidate list for each query. The following tables are the top five groups from two search queries. It is also possible to have queries where the number of actors is not three. 
 
 
-\begin{table}
+
+\begin{table}[H]
 \centering
     \begin{tabular}{ |c|c|c|c| } 
         \hline
@@ -83,12 +96,15 @@ The search engine is not limited to five groups for a search query. It will retu
 	\label{tab:3-step relation score}
 \end{table}
 
+
+
 The original actors from the Interstallar movie are Matthew McConaughey: nm0000190, Anne Hathaway: nm0004266, Jessica Chastain: nm1567113. As the result show we achieved our goal of getting the original cast highly ranked by the engine.
 
 However, it also highlights the largest problem we have been struggling to solve, which is that groups often contain the same actors. In this result the original actor from the second candidate list is the recommendation for eight of the top ten groups. The first candidate is repeated less, only four times in the top ten groups.
 
 
-\begin{table}
+
+\begin{table}[H]
 	\centering
     \begin{tabular}{ |c|c|c|c| } 
         \hline
@@ -104,5 +120,7 @@ However, it also highlights the largest problem we have been struggling to solve
 \caption{1917 attributes with a 2-step relation score search}
 \label{tab:2-step relation score}
 \end{table}
+
+
 
 The only original actor present in the result is George MacKay: nm1126657. Our initial thought was that the other actors must not be very good which turned out not to be true because both of them have acted in titles like Game of Thrones and Star Wars. The reason is that their birth year is missing from the data. This means that the engine is not able to consider them as candidates because their age cannot be determined.
