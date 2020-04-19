@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex main"] 1587294092 "main.aux" "main.bbl" "main" 1587294808
+["bibtex main"] 1587298106 "main.aux" "main.bbl" "main" 1587298111
   "./ACM-Reference-Format.bst" 1582192579 86371 53d55cf5e954c8907ec8f61116838886 ""
-  "main.aux" 1587294096 8321 69d6476cf69c283d99944f7d975e76da "pdflatex"
+  "main.aux" 1587298110 8321 9154588f3547189e1843d4056a01bf4d "pdflatex"
   "sample-bibliography.bib" 1586983902 9089 f5f1b7397cc30f014df681a46924977b ""
   (generated)
   "main.blg"
   "main.bbl"
-["pdflatex"] 1587294093 "c:/Users/Christoffer/Desktop/dat500-project/report/main.tex" "c:\Users\Christoffer\Desktop\dat500-project\report/main.pdf" "main" 1587294808
+["pdflatex"] 1587298106 "c:/Users/Christoffer/Desktop/dat500-project/report/main.tex" "c:\Users\Christoffer\Desktop\dat500-project\report/main.pdf" "main" 1587298111
   "C:/Program Files/MiKTeX 2.9/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1233955454 916 f87d7c45f9c908e672703b83b72241a3 ""
   "C:/Program Files/MiKTeX 2.9/fonts/tfm/public/amsfonts/symbols/msam5.tfm" 1233955454 924 9904cf1d39e9767e7a3622f2a125a565 ""
   "C:/Program Files/MiKTeX 2.9/fonts/tfm/public/amsfonts/symbols/msam7.tfm" 1233955454 928 2dc8d444221b7a635bb58038579b861a ""
@@ -302,14 +302,14 @@
   "C:/Users/Christoffer/AppData/Roaming/MiKTeX/2.9/tex/latex/xstring/xstring.sty" 1543862004 123 a302f2c651a95033260db60e51527ae8 ""
   "acmart.cls" 1582192579 88498 6758c69252d4dc3ca43eb13129d02d17 ""
   "c:/Users/Christoffer/Desktop/dat500-project/report/main.tex" 1587288205 2171 49f50f9b20bf57c9a7bed3d7d36f1136 ""
-  "c:\Users\Christoffer\Desktop\dat500-project\report/main.aux" 1587294096 8321 69d6476cf69c283d99944f7d975e76da ""
+  "c:\Users\Christoffer\Desktop\dat500-project\report/main.aux" 1587298110 8321 9154588f3547189e1843d4056a01bf4d ""
   "dat620-setup.tex" 1582192579 391 5fdfb367dc55118e069b0da2b1e1bf77 ""
   "fig/SparkProcess.jpg" 1587292570 33246 8bb3649b3eea25d3e2e1938d9211f8f8 ""
   "fig/relation_graph.png" 1586983613 41888 8d119b1467b8442c5e691096c8aa068c ""
   "fig/workflow.png" 1587288205 44894 f116010f10c816b6de928ce5910d909e ""
-  "main.aux" 1587294096 8321 69d6476cf69c283d99944f7d975e76da "pdflatex"
-  "main.bbl" 1587294093 6689 b42f81ff8715515ed1ce1bc00fd844f3 "bibtex main"
-  "main.out" 1587294096 2094 5bc7332572181274c354e07399c3a0e6 "pdflatex"
+  "main.aux" 1587298110 8321 9154588f3547189e1843d4056a01bf4d "pdflatex"
+  "main.bbl" 1587298106 6689 b42f81ff8715515ed1ce1bc00fd844f3 "bibtex main"
+  "main.out" 1587298110 2094 5bc7332572181274c354e07399c3a0e6 "pdflatex"
   "main.tex" 1587288205 2171 49f50f9b20bf57c9a7bed3d7d36f1136 ""
   "preamble.tex" 1587292988 421 b7e7b3d0d68491dfbd572762660ac17c ""
   "tex/abstract.tex" 1587288205 637 663afd1b25c95b5462256958861806c4 ""
@@ -318,12 +318,12 @@
   "tex/evaluation.tex" 1587288205 8681 3a8a95119e4e54ff8f4e9e4f2a3c183c ""
   "tex/hadoop.tex" 1587288835 1776 47410074845764de103b0b1365e58f44 ""
   "tex/introduction.tex" 1587288835 3342 c2953948f19ae470f41d7d7682d27352 ""
-  "tex/method.tex" 1587294807 30800 2b0c60f8264d4e81d0a5852750f0a3a7 ""
+  "tex/method.tex" 1587298011 30804 8346c93a7992267f7dbde0bbf00a558e ""
   "tex/relatedwork.tex" 1587288205 1264 309b5fae459a3efdde5c1f2f989b83ac ""
   (generated)
   "main.aux"
   "c:\Users\Christoffer\Desktop\dat500-project\report/main.pdf"
-  "c:\Users\Christoffer\Desktop\dat500-project\report/main.log"
-  "main.pdf"
-  "main.log"
   "main.out"
+  "main.log"
+  "main.pdf"
+  "c:\Users\Christoffer\Desktop\dat500-project\report/main.log"
