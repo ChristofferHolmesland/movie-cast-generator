@@ -24,7 +24,25 @@ The information from the ratings and principals files are combined to create a a
 
 The ranking algorithm is used to give a score to the actor groups. The score is given as a number between 0 and 10, where a higher score indicates a higher rank. The final score is a combination of three scores. We call the first one the genre score. It is calculated based on the actors previous performance in that particular genre. The second score is the similarity score. It is calculated from the plot summary of the movies a person has acted in. The third and final score is the relation score between the actor and the other actors in the group. The final score is the weighted average of these scores. The weighting is chosen by the system based on how many relationships are found within the group.
 
+\subsubsection{Selecting actors}
 
+The first part of the ranking algorithm is to find every actor matching the search query. This is done using SparkSQL and Spark Dataframe operations as shown in listing \ref{CodeActorSelection}. The user supplied descriptions are read from the \textit{search\_actors} list.
+
+\begin{lstlisting}[float=h!, language=Python, caption=Actor selection in PySpark implementation, label=CodeActorSelection, numbers=left]
+candidate_sql = "SELECT nconst, genre_score, tconst FROM Actors WHERE age >= {0} AND age <= {1} AND gender= {2}"
+candidates = []
+for i, desc in enumerate(search_actors):
+    # Select actors based on the actor description
+    cand = spark.sql(candidate_sql.format(desc[1], desc[2], 1 if desc[0] == "Female" else 0))
+    # Create condition that will only select actors with all of the genres.
+    genre_condition = cand.genre_score.contains(search_genres[0])
+    if len(search_genres) > 1:
+        for genre in search_genres[1:]:
+            genre_condition &= cand.genre_score.contains(genre)
+    cand = cand.filter(genre_condition).withColumn("tconst", convert_to_arr(cand.tconst))
+    # Actor score calculation omitted.
+    candidates.append(cand)
+\end{lstlisting}
 
 \subsubsection{Genre score}
 
