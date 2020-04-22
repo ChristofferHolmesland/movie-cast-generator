@@ -6,7 +6,7 @@ In this section, we are going to look at the difference in runtime between the i
 
 \subsection{Experimental setup}
 
-The MRJob/Spark implementation code ran on the Hadoop cluster described in the Hadoop cluster section. The Python implementation ran on a machine running Windows 10 Pro with the following hardware: Intel i5-8600K 3.6GHz CPU, 16 GB DDR4 2667MHz memory, and a SSD disk with a read speed of 500MB/s and a write speed of 320MB/s. The Python version used is 3.7.4 64-bit. To measure the execution time of the pre-processing scripts we used the time(1)\cite{Time1} linux command. To be able to use linux commands on a Windows machine, we used the Git Bash terminal\cite{GitBash}. In the pre-processing steps each task is implemented in MRJob except the graph task which was implemented in Spark. The algorithm steps are implemented using Spark. The time unit is seconds unless otherwise specified. To measure the execution time, we used the time function from the time library in Python. We were not able to use the time(1)command because we wanted to measure several functions defined in the same script
+The MRJob/Spark implementation code ran on the Hadoop cluster described in the Hadoop cluster section. The Python implementation ran on a machine running Windows 10 Pro with the following hardware: Intel i5-8600K 3.6GHz CPU, 16 GB DDR4 2667MHz memory, and a SSD disk with a read speed of 500MB/s and a write speed of 320MB/s. The Python version used is 3.7.4 64-bit. To measure the execution time of the pre-processing scripts we used the time(1)\cite{Time1} linux command. To be able to use linux commands on a Windows machine, we used the Git Bash terminal\cite{GitBash}. In the pre-processing steps each task is implemented in MRJob except the graph task which was implemented in Spark. The algorithm steps are implemented using Spark. The time unit is seconds unless otherwise specified. To measure the execution time, we used the time function from the time library in Python. We were not able to use the time(1) command because we wanted to measure several functions defined in the same script
 
 
 
@@ -21,8 +21,6 @@ The first and most important one is that there is an overhead when you use Hadoo
 The second reason for why the Python implementation is faster is because all of the data is able to fit in memory at once, while the Hadoop implementation requires data to be stored on multiple nodes and transferred between them. 
 
 The third reason is because the machine running the Python code is faster, it has more memory and a faster processor. Since the pre-processing is only supposed to happen once, we decided to not spend a lot of time optimizing the code so that we could focus on the algorithm instead.
-
-
 
 \begin{table}[H]
 \centering
@@ -42,8 +40,6 @@ The third reason is because the machine running the Python code is faster, it ha
     \caption{Pre-processing runtime of Python and Spark in seconds}
     \label{tab:preprocess runtime}
 \end{table}
-
-
 
 \subsubsection{Algorithm}
 
@@ -75,7 +71,7 @@ The search query execution times were measured while using the attributes from t
 
 \subsubsection{Search result}
 
-The search engine is not limited to five groups for a search query. It will return groups using the top 25 actors from each candidate list, and also return the complete candidate list for each query. The following tables are the top five groups from two search queries. It is also possible to have queries where the number of actors is not three. 
+The search engine is not limited to five groups for a search query. It will return groups using the top 25 actors from each candidate list, and also return the complete candidate list for each query. A more complete search result is shown in Section \ref{sec:appendixA}, Appendix A - Search result. The following tables are the top five groups from two search queries. It is also possible to have queries where the number of actors is not three. 
 
 
 
