@@ -63,6 +63,47 @@ The similarity score is calculated by comparing the summary plot given as input 
     \item \textbf{Tensorflow model from Google: }The model \cite{TFHubModel} available in the TensorFlow Hub is also a form of word2vec model but is instead trained and optimized for greater-than-word length text, such as sentences, phrases or short paragraphs. This perfectly matched our criteria and gave excellent results. This model would return a value between 0 and 1 which we multiplied by 10 to normalise it like the genre score.
 \end{itemize}
 
+To show the problems we faced while using the tf-idf method to calculate the plot similarities some of the top results are included in table \ref{tab:tfidf}. The text column indicates whether or not the plot is similar to the themes found in the Interstellar plot. Plots that include themes like aliens, global disasters and space travel are marked by "Ok". The two plots marked "Not ok" are romance related. The complete plot summaries are included in section \ref{sec:appendixB}, Appendix B - Movie plots. The first problem is the similarity score which differ a lot between some plots while other plots are close. The first plot belongs to Interstellar and it is expected to be first with a similarity close to one. Because the following plot similarity is approximately 0.12 then the original cast of Interstellar will be given a much higher similarity score compared to every other actor. The second problem is that two movies which are not similar in the plot are included in the top 10 plot similarities. This means that actors of movie 7 and 9 are given an advantage over actors in movie 10 even though they have acted in a movie with a less similar plot. If we had used this method to adjust the actor scores then the result would have been less correct.
+\begin{table}[H]
+    \centering
+        \begin{tabular}{ |c|c|c| } 
+            \hline
+            \textbf{Order} & \textbf{Score} & \textbf{Text} \\ 
+            \hline
+            1 & 1.0 & Ok \\
+            2 & 0.12166245 & Ok \\
+            3 & 0.11172818 & Ok \\
+            7 & 0.09751986 & Not ok  \\
+            9 & 0.09095107 & Not ok \\
+            10 & 0.08666907 & Ok \\
+            100 & 0.048099644 & Not ok \\
+            \hline
+        \end{tabular}
+        \caption{Plot similarity using tf-idf}
+        \label{tab:tfidf}
+\end{table}
+    
+Similarly we can inspect the result of the Tensorflow model scores shown in figure \ref{tab:tfsim}. This model somewhat solves the problem in the large difference between the similarities. The first and second result are now closer together. In addition we see that the model is a lot better at ranking the plots based on theme. Every movie in the top 10 list is very similar in the plot, and even after looking at the top 100 movies the plots are similar. Some of the movies do not contain the space themes anymore, but they are still related to a global disaster.
+
+\begin{table}[H]
+    \centering
+        \begin{tabular}{ |c|c|c| } 
+            \hline
+            \textbf{Order} & \textbf{Score} & \textbf{Text} \\ 
+            \hline
+            1 & 0.9999998 & Ok \\
+            2 & 0.6389396 & Ok \\
+            3 & 0.6158022 & Ok \\
+            7 & 0.5422988 & Ok  \\
+            9 & 0.5414115 & Ok \\
+            10 & 0.52352154 & Ok \\
+            100 & 0.39957327 & Ok \\
+            \hline
+        \end{tabular}
+        \caption{Plot similarity using Tensorflow model}
+        \label{tab:tfsim}
+\end{table}
+
 There is a large drawback to using a tensorflow model when the program runs on Spark. The model is quite large, almost one gigabyte. Usually a spark broadcast variable would be used to share an object between nodes but in this case it couldn’t be done because the model cannot be pickled which is a requirement for broadcast variables. To be able to use it on the slaves each of them would have to load it into memory instead. To achieve this we defined closures for each partition of the data where the tensorflow library was imported and the model was loaded. Importing the tensorflow library is quite expensive. It usually halts for 30 seconds before the import is done. Loading the model is equally expensive, thus the total time on each partition is a minute before work can start. Because there is multiple partitions per node, the model is loaded several times on each of them. In our case this took so much time that the algorithm hadn’t finished after several hours. We didn’t consider this acceptable and looked for a different alterantive. The best solution we found was to do the calculations on the master node instead. Because it has more memory available, we were able to load the model once and calculate the similarity score for each title using the rdd.toLocalIterator() generator of the DataFrame, shown in code listing \ref{CodeToLocalIterator}. This means that all of the data had to be transferred over the network to the master node, and then back again to the slave nodes when the calculations were done, but this was actually faster in our cluster than the former method. The runtime of similarity score is typically about 8 minutes. The initial version was a bit slower, but when we decided to pre-allocate the lists where the similarity score is stored before being turned into a DataFrame the performance improved. We do however recognize that transferring the data over the network might be a bad option in general and think that if we had more time to work on this we would have looked for a better solution.
 
 
