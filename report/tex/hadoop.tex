@@ -1,7 +1,7 @@
 Our Hadoop cluster consists of one name node and three slave nodes.
 The name node has 8 GB RAM and a 2.4 GHz Intel Skylake processor with 4 cores.
 The three slave nodes have 4 GB RAM each and a 2.4 GHz Intel Skylake processor with 2 cores.
-We used Hadoop version 3.2.1, Spark version 3.0.0-preview2 and Python version 3.5.2.
+We used Hadoop version 3.2.1, Spark version 3.0.0-preview2 and Python version 3.5.2. The cluster is running on the Ubuntu 16.04.6 LTS (GNU/Linux 4.4.0-159-generic x86\_64) operating system.
 \\
 The Spark documentation recommends using at least 8 GiB memory and between 8-16 cores on each node\cite{SparkHardware}. Because our cluster does not meet those requirements, we had to make some changes to the configuration files. We are running the project as a YARN job and we had to keep in mind that the maximum amount of memory configured in YARN had to be greater than what we configure in Spark. It is not recommended to use more than 75\% of the available memory so we decided on 3 GB. The initial amount of memory Spark uses on startup is defined in the spark.driver.memory. The default value is 1GB which we noticed was a bit too much for our cluster. Instead we used 512MB. The Spark driver only runs if we are running Spark in cluster mode. If Spark runs in client mode, the value specified in spark.yarn.am.memory is used instead so this was set to 512MB as well. 
 
