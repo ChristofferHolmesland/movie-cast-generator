@@ -1,9 +1,30 @@
 # Movie cast generation using a search engine
+
+# Table of contents
+- [Report PDF](/report/main.pdf)
+- [Overview](#overview)
+- [File structure](#file-structure)
+- [Instructions](#instructions)
+
+# Overview
 This repository contains the work we did on our project for the DAT500 - Data intensive systems course at the University of Stavanger. The project is a search engine that can be used by movie directors to find cast suggestions based on actor descriptions, movie genres and movie plot. 
 
 The required data can be downloaded from [IMDb](https://www.imdb.com/interfaces/), except the movie plots which are available from the [OMDb API](http://www.omdbapi.com/). Your OMDb API keys should be put in a file called omdb_api_keys.secret in the secrets folder, each key on a seperate line. The movie plots can then be downloaded using the preprocessing/omdbpy_downloader.py script. If you do not have API keys then they can be generated using the preprocessing/generate_api_keys.py script. This script relies on two APIs which might change between now and when you read this. If the script does not give you any keys then you need to register on the OMDb site instead.
 
 The search engine is implemented in Python and on Spark using PySpark. If you are running the Python version the data files should be in the data folder. If you are running on Spark then they should be available on the HDFS in the ~/project/data folder. We assume you have a working Hadoop cluster running Spark. Check the report in report/main.pdf if you want to mirror our cluster setup. The preprocessing scripts that should run on Spark are written using the MRJob library. There are also two scripts that run on Spark. They can be found in the mrjob folder, and in the spark folder. A list of all the commands required to run the preprocessing are found in spark/commands.txt. These commands assume the raw data is available here: hdfs:///user/ubuntu/project/data/. The Python implementation uses Pandas to perform the preprocessing. The scripts are located in the preprocessing folder.
+
+# File structure
+- /algorithm/ contains the python implementation of our algorithm.
+- /data/ is used to store the data files. If this folder is empty you will need to populate it by downloading the raw data files and running the pre-processing scripts.
+- /mrjob/ contains the pre-processing scripts that are implemented using the MRJob library.
+- /mrjob_data/ is used to store the result of the MRJob pre-processing if the jobs are executed on your local machine instead of the Hadoop cluster.
+- /preprocessing contains the pre-processing scripts used by the python implementation.
+- /presentations/ contains the powerpoint presentations we used during class.
+- /report/ contains the latex files used to generate the report.
+- /secrets/ is used to store the OMDb API key.
+- /spark/ contains the scripts used to run a search on a Hadoop cluster using PySpark.
+- /inputX.txt contains sample search queries.
+- /README.md is this file :)
 
 # Instructions:
 ## Run search on Spark/Hadoop:
@@ -30,7 +51,7 @@ The search engine is implemented in Python and on Spark using PySpark. If you ar
 - Execute algorithm/relation_score_final.py
 - The result can be found in data/final3_top25_latest.tsv
 
-# Accessing our Hadoop cluster (assuming you have the IP :=))
+## Accessing our Hadoop cluster (assuming you have the IP :=))
 - Connect to master node.
   - `ssh ubuntu@ip`
 - From the master node you can connect to slave-1, slave-2 and slave-3.
