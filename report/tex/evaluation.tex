@@ -1,14 +1,8 @@
-%!TEX root = main.tex
-
 In this section, we are going to look at the difference in runtime between the implementation in Python and the Spark implementation. We are also going to show the results of some search queries.
-
-
 
 \subsection{Experimental setup}
 
 The MRJob/Spark implementation code ran on the Hadoop cluster described in the Hadoop cluster section. The Python implementation ran on a machine running Windows 10 Pro with the following hardware: Intel i5-8600K 3.6GHz CPU, 16 GB DDR4 2667MHz memory, and a SSD disk with a read speed of 500MB/s and a write speed of 320MB/s. The Python version used is 3.7.4 64-bit. To measure the execution time of the pre-processing scripts we used the time(1)\cite{Time1} linux command. To be able to use linux commands on a Windows machine, we used the Git Bash terminal\cite{GitBash}. In the pre-processing steps each task is implemented in MRJob except the graph task which was implemented in Spark. The algorithm steps are implemented using Spark. The time unit is seconds unless otherwise specified. To measure the execution time, we used the time function from the time library in Python. We were not able to use the time(1) command because we wanted to measure several functions defined in the same script
-
-
 
 \subsection{Results}
 
@@ -43,20 +37,19 @@ The third reason is because the machine running the Python code is faster, it ha
 
 \subsubsection{Algorithm}
 
-The search query execution times were measured while using the attributes from the Interstellar movie. The total Python time is an estimate based on the relation score measurement. The relation score times are reported as a per relation score to better reflect the difference. The reason for why the difference is so great is because the Spark implementation is able to compute multiple relation scores at the same time, while the Python implementation can only compute one at a time. A more detailed explanation of the difference can be found in the Relation score section in part 5. In the execution time of the algorithm we can again see that when transferring data between nodes is required, the time increases a lot. This is why the Python implementation is faster in the candidate actors’ task and the similarity score task. As we discussed in the similarity score section, we were not able to figure out a good method of sharing the tensorflow model between the worker nodes on Spark which is why the time is significantly greater in this task. The relation score time was calculated while running a 2-step search. When the number of steps is increased to three the run time per relation is increased to 0.4 seconds.
-
+The search query execution times were measured while using the attributes from the Interstellar movie, shown in section \ref{sec:appendixA}, Appendix A - Search results. The total Python time is an estimate based on the relation score measurement. The relation score times are reported as a per relation score to better reflect the difference. The reason for why the difference is so great is because the Spark implementation is able to compute multiple relation scores at the same time, while the Python implementation can only compute one. A more detailed explanation of the difference can be found in the Relation score section in part 5. In the execution time of the algorithm we can again see that when transferring data between nodes is required the time increases a lot. This is why the Python implementation is faster in the candidate actors task and the similarity score task. As we discussed in the similarity score section we were not able to figure out a good method of sharing the Tensorflow model between the worker nodes on Spark which is why the time is significantly greater in this task. The relation score time was calculated while running a 2-step search. When the number of steps is increased to three the run time per relation is increased to 0.4 seconds. The difference between the Interstellar search with 3 actors and 5 actors is caused by the fact that the number of groups is much larger when five candidate lists are used. Instead of 2700 groups there are about 24 million.
 
 
 \begin{table}[H]
 	\centering
-    \begin{tabular}{ |c|c|c| } 
+    \begin{tabular}{ |c|c|c|c| } 
         \hline
-        \textbf{Task} & \textbf{Python} & \textbf{Spark} \\ 
+        \textbf{Task} & \textbf{Python} & \textbf{Spark 3 actors} & \textbf{Spark 5 actors}\\ 
         \hline
-        candidate actors & 60.3 & 331.5 \\ 
-        similarity score & 89.6 & 448.8 \\ 
-        relation score & 438.0 & 0.0362 \\ \hline
-        \textbf{Total} & \textbf{13.7 days} & \textbf{1182.1} \\ 
+        candidate actors & 60.3 & 331.5 & 344.7 \\ 
+        similarity score & 89.6 & 448.8 & 461.4 \\ 
+        relation score & 438.0 & 0.0362 & 0.0254 \\ \hline
+        \textbf{Total} & \textbf{13.7 days} & \textbf{1182.1} & \textbf{2388.7} \\ 
         \hline
     \end{tabular}
 	\caption{Algorithm runtime of Python and Spark in seconds}
@@ -64,14 +57,9 @@ The search query execution times were measured while using the attributes from t
 \end{table}
 
 
-
-The search query execution times were measured while using the attributes from the Interstellar movie. The total Python time is an estimate based on the relation score measurement. The relation score times are reported as a per relation score to better reflect the difference. The reason for why the difference is so great is because the Spark implementation is able to compute multiple relation scores at the same time, while the Python implementation can only compute one. A more detailed explanation of the difference can be found in the Relation score section in part 5. In the execution time of the algorithm we can again see that when transferring data between nodes is required the time increases a lot. This is why the Python implementation is faster in the candidate actors task and the similarity score task. As we discussed in the similarity score section we were not able to figure out a good method of sharing the tensorflow model between the worker nodes on Spark which is why the time is significantly greater in this task. The relation score time was calculated while running a 2-step search. When the number of steps is increased to three the run time per relation is increased to 0.4 seconds.
-
-
-
 \subsubsection{Search result}
 
-The search engine is not limited to five groups for a search query. It will return groups using the top 25 actors from each candidate list, and also return the complete candidate list for each query. A more complete search result is shown in Section \ref{sec:appendixA}, Appendix A - Search result. The following tables are the top five groups from two search queries. It is also possible to have queries where the number of actors is not three. 
+The search engine is not limited to five groups for a search query. It will return groups using the top 30 actors from each candidate list, and also return the complete candidate list for each query. A more complete search result is shown in Section \ref{sec:appendixA}, Appendix A - Search result. The following tables are the top five groups from two search queries. It is also possible to have queries where the number of actors is not three. 
 
 
 
