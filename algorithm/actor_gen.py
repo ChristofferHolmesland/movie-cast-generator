@@ -12,6 +12,7 @@ file_path=('../input2.txt')
 
 with open(file_path,'rt') as f:
     for i,line in enumerate(f):
+        print(line.split()[0])
         if line.split()[0] == 'genre:':
             genre=(line.split(',')[1:-1])
         if line.split()[0] == 'actors:':

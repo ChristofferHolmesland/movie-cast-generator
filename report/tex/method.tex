@@ -102,7 +102,7 @@ The similarity score is calculated by comparing the summary plot given as input 
     \item \textbf{Tensorflow model from Google: }The model \cite{TFHubModel} available in the TensorFlow Hub is also a form of word2vec model but is instead trained and optimized for greater-than-word length text, such as sentences, phrases or short paragraphs. This perfectly matched our criteria and gave excellent results. This model would return a value between 0 and 1 which we multiplied by 10 to normalise it like the genre score.
 \end{itemize}
 
-To show the problems we faced while using the tf-idf method to calculate the plot similarities some of the top results are included in table \ref{tab:tfidf}. The text column indicates whether or not the plot is similar to the themes found in the Interstellar plot. Plots that include themes like aliens, global disasters and space travel are marked by "Ok". The two plots marked "Not ok" are romance related. The complete plot summaries are included in section \ref{sec:appendixB}, Appendix B - Movie plots. The first problem is the similarity score which differ a lot between some plots while other plots are close. The first plot belongs to Interstellar and it is expected to be first with a similarity close to one. Because the following plot similarity is approximately 0.12 then the original cast of Interstellar will be given a much higher similarity score compared to every other actor. The second problem is that two movies which are not similar in the plot are included in the top 10 plot similarities. This means that actors of movie 7 and 9 are given an advantage over actors in movie 10 even though they have acted in a movie with a less similar plot. If we had used this method to adjust the actor scores then the result would have been less correct.
+To show the problems we faced while using the tf-idf method to calculate the plot similarities, some of the top results are included in table \ref{tab:tfidf}. The text column indicates whether or not the plot is similar to the themes found in the Interstellar plot. Plots that include themes like aliens, global disasters and space travel are marked by "Ok". The two plots marked "Not ok" are romance related. The complete plot summaries are included in section \ref{sec:appendixB}, Appendix B - Movie plots. The first problem is the similarity score which differ a lot between some plots while other plots are close. The first plot belongs to Interstellar and it is expected to be first with a similarity close to one. Because the following plot similarity is approximately 0.12 then the original cast of Interstellar will be given a much higher similarity score compared to every other actor. The second problem is that two movies which are not similar in the plot are included in the top 10 plot similarities. This means that actors of movie 7 and 9 are given an advantage over actors in movie 10 even though they have acted in a movie with a less similar plot. If we had used this method to adjust the actor scores then the result would have been less correct.
 \begin{table}[H]
     \centering
         \begin{tabular}{ |c|c|c| } 
@@ -244,29 +244,28 @@ By observing that the same calculations are done when finding the path from A1 t
 Following the assumptions from before, the total time for a 2-step search is 129 seconds. This gives a time per relation of 0.048 seconds which means that compared to the original algorithm, the execution time has been improved by a factor of 9500. The number of paths for the 3-step search is quite a bit larger but the improvement is still significant. The total execution time is 4402 seconds, giving a time per relation of 1.63 seconds which is a 280 times improvement. 
 
 
+\begin{lstlisting}[float=h!, language=Python, caption=Calculating group scores using PySpark, label=CodeUDF, numbers=left]
+    @F.udf("float")
+    def calc_final_score(row):
+        actors = row[0].split(", ")
+        relation_scores = []
+        # Retrieve every actor to actor relation score.
+        for i in range(len(actors)):
+            for j in range(i + 1, len(actors)):
+                relation_scores.append(relations[actors[i]][actors[j]])
+        not_none = [score for score in relation_scores if score != None]
+        n_not_none = len(not_none)
+        if n_not_none == 0:
+            return row[1]
+        # Compute the relation score weighting based on how many relationships exist in the group.
+        relation_ratio = (1 / 3) * n_not_none / len(relation_scores)
+        # Return the final score as a weighted average.
+        return (1 - relation_ratio) * row[1] + relation_ratio * sum(not_none) / n_not_none
+    \end{lstlisting}
 
 \subsubsection{Overall score}
 
 The ranking algorithm is used to determine whether one actor could perform better than another. This is done by calculating a score for the actors, before combining them to get a score for the whole group. Our algorithm assumes the first actor description to be the primary actor and tries to maximise the cast rank based on this. The following is a description of our algorithm. The first step is to find every actor that matches the primary actor description. For every matching actor, a score is calculated. It is a combination of the genre score, past acting relationship (maybe) and how similar the plots of the movies the actor has acted in are to the user plot. The genre score is taken as the average of the actor genre scores, given that they match the user genres. This is done because one actor might have a high score in war and action movies, but low in romance and drama. If the user is making a romance and drama movie, then the genre score is taken as the average of just those two scores. The plot of every movie the actor has been in is compared to the user plot. The maximum similarity score is used for the actor score. To make the average of the genre score and the similarity equally important for the actor score the similarity bound is changed to (0, 10). Then the actor score is changed to be in the interval (0, 1). Thus the expression for the score is: $actor(id)=\frac{1}{20}(avg(genrescore)+5.(max(similarity)+1))$.To find the other actors the procedure above is repeated on the actors matching the other descriptions. Because we consider it beneficial to cast actors who have worked together before, we use the relation score calculation stated above to calculate the actor relation score. To calculate the cast score, we also make a prediction of the IMDB rating that the resulting movie will have if the selected actors are in it. The prediction is calculated from the average of the actors’ average genre scores. The expression for the cast score is: $$cast(ids)=\frac{1}{\#ids}\sum_{i=1}^{\#ids}worked(ids_i, ids_1)\cdot actor(ids_i) + rating(ids)$$. The $worked$ function returns X if they have worked together before, 0 otherwise. The calculation is done using a user-defined function operating on each row, shown in listing \ref{CodeUDF}.
-
-\begin{lstlisting}[float=h!, language=Python, caption=Calculating group scores using PySpark, label=CodeUDF, numbers=left]
-@F.udf("float")
-def calc_final_score(row):
-    actors = row[0].split(", ")
-    relation_scores = []
-    # Retrieve every actor to actor relation score.
-    for i in range(len(actors)):
-        for j in range(i + 1, len(actors)):
-            relation_scores.append(relations[actors[i]][actors[j]])
-    not_none = [score for score in relation_scores if score != None]
-    n_not_none = len(not_none)
-    if n_not_none == 0:
-        return row[1]
-    # Compute the relation score weighting based on how many relationships exist in the group.
-    relation_ratio = (1 / 3) * n_not_none / len(relation_scores)
-    # Return the final score as a weighted average.
-    return (1 - relation_ratio) * row[1] + relation_ratio * sum(not_none) / n_not_none
-\end{lstlisting}
 
 The cast score is used to rank the groups. A higher score means a better group. The groups are sorted in descending order and returned to the user.
 
